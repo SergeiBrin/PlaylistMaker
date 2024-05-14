@@ -7,4 +7,5 @@
     <string name="action_share_app">Поделиться приложением</string>
     <string name="support_contact">Написать в поддержку</string>
     <string name="button_user_agreement">Пользовательское соглашение</string>
+    <string name="in_developing"><b>В разработке</b></string>
 </resources>
