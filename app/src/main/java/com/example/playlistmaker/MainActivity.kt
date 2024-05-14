@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val searchButton = findViewById<Button>(R.id.search_button)
         searchButton.setOnClickListener {
             val searchIntent = Intent(this@MainActivity, SearchActivity::class.java)
