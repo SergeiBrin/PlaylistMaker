@@ -28,13 +28,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val settingsButton = findViewById<Button>(R.id.settings_button)
-        val settingsClickListener: View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(settingsIntent)
-            }
+        settingsButton.setOnClickListener {
+            val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+            startActivity(settingsIntent)
         }
-        settingsButton.setOnClickListener(settingsClickListener)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
