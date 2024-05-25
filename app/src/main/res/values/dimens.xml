@@ -2,7 +2,8 @@
 <resources>
     <dimen name="header">56dp</dimen>
     <dimen name="settings_layout_size">56dp</dimen>
-    <dimen name="margin_from_edge">16dp</dimen>
+    <dimen name="margin">16dp</dimen>
+    <dimen name="button_fillet">16dp</dimen>
     <dimen name="text_regular">16sp</dimen>
     <dimen name="text_medium">22sp</dimen>
 </resources>
