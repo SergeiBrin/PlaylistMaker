@@ -12,20 +12,11 @@
         android:layout_marginBottom="24dp">
 
         <ImageView
-            android:id="@+id/arrow_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin"
-            android:src="@drawable/arrow_back_lm"
-            app:tint="?attr/colorOnSecondary" />
+            android:id="@+id/arrow_back_settings_screen"
+            style="@style/ArrowBackHeaderIcon" />
 
         <TextView
             style="@style/HeaderText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="60dp"
             android:text="@string/settings" />
 
     </FrameLayout>
