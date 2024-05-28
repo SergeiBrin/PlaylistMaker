@@ -3,20 +3,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/in_developing"
-        android:textSize="@dimen/text_medium" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/gear"
-        android:layout_margin="10dp" />
+        <ImageView
+            android:id="@+id/arrow_back"
+            style="@style/ArrowBackHeaderIcon" />
+
+        <TextView
+            style="@style/HeaderText"
+            android:text="@string/search" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="36"
+            android:hint="@string/search"
+            android:lines="1"
+            android:background="@drawable/rectangle"
+            android:backgroundTint="@color/search_light_gray"
+            android:paddingStart="36dp"
+            android:paddingEnd="16dp"
+            android:textColorHint="@color/light_gray"
+            android:textSize="16sp"
+            android:fontFamily="@font/ys_display_regular"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button1_lm"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:backgroundTint="@color/search_light_gray"/>
+
+
+    </FrameLayout>
 
 </LinearLayout>
