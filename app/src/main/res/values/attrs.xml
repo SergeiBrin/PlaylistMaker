@@ -2,4 +2,5 @@
 <resources>
     <attr name="searchForm" format="color" />
     <attr name="dataInSearchForm" format="color" />
+    <attr name="iconsOnTheSettingsScreen" format="color" />
 </resources>

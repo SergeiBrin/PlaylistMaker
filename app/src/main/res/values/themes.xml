@@ -10,8 +10,9 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/navy_blue</item>
 
-        <item name="searchForm">@color/search_light_gray</item>
+        <item name="searchForm">@color/very_light_gray</item>
         <item name="dataInSearchForm">@color/light_gray</item>
+        <item name="iconsOnTheSettingsScreen">@color/very_light_gray</item>
 
         <!-- Background and icon color. -->
         <item name="android:background">@color/white</item>
