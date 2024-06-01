@@ -10,9 +10,12 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/navy_blue</item>
 
+        <item name="searchForm">@color/search_light_gray</item>
+        <item name="dataInSearchForm">@color/light_gray</item>
+
         <!-- Background and icon color. -->
         <item name="android:background">@color/white</item>
-        <item name="android:tint">@color/light_gray</item>
+        <item name="android:textColorHint">@color/light_gray</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/white</item>
@@ -22,5 +25,6 @@
     <style name="Theme.MainScreen" parent="Theme.PlaylistMaker">
         <item name="android:background">@color/bright_blue</item>
         <item name="android:statusBarColor">@color/bright_blue</item>
+        <item name="android:tint">@color/light_gray</item>
     </style>
 </resources>

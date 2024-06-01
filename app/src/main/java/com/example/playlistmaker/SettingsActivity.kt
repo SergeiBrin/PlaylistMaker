@@ -12,7 +12,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val arrowBackButton = findViewById<ImageView>(R.id.arrow_back)
+        val arrowBackButton = findViewById<ImageView>(R.id.arrow_back_settings_screen)
         arrowBackButton.setOnClickListener {
             finish()
         }

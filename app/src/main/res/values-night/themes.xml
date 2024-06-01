@@ -11,9 +11,12 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/white</item>
 
+        <item name="searchForm">@color/white</item>
+        <item name="dataInSearchForm">@color/navy_blue</item>
+
         <!-- Background and icon color. -->
         <item name="android:background">@color/navy_blue</item>
-        <item name="android:tint">@color/white</item>
+        <item name="android:textColorHint">@color/navy_blue</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/navy_blue</item>

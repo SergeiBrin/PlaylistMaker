@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <FrameLayout
-        style="@style/SettingsScreenFrameLayout"
+        style="@style/HeaderFrameLayout"
         android:layout_marginBottom="24dp">
 
         <ImageView
@@ -17,12 +16,13 @@
 
         <TextView
             style="@style/HeaderText"
+            android:layout_marginStart="64dp"
             android:text="@string/settings" />
 
     </FrameLayout>
 
     <FrameLayout
-        style="@style/SettingsScreenFrameLayout">
+        style="@style/HeaderFrameLayout">
 
         <TextView
             style="@style/RegularTextOnSettingsScreen"
@@ -38,7 +38,7 @@
 
     <FrameLayout
         android:id="@+id/btn_share_app"
-        style="@style/SettingsScreenFrameLayout">
+        style="@style/HeaderFrameLayout">
 
         <TextView
             style="@style/RegularTextOnSettingsScreen"
@@ -52,7 +52,7 @@
 
     <FrameLayout
         android:id="@+id/btn_support_contact"
-        style="@style/SettingsScreenFrameLayout">
+        style="@style/HeaderFrameLayout">
 
         <TextView
             style="@style/RegularTextOnSettingsScreen"
@@ -65,7 +65,7 @@
 
     <FrameLayout
         android:id="@+id/btn_user_agreement"
-        style="@style/SettingsScreenFrameLayout">
+        style="@style/HeaderFrameLayout">
 
         <TextView
             style="@style/RegularTextOnSettingsScreen"
