@@ -48,9 +48,9 @@
             android:layout_height="@dimen/margin"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin"
-            android:backgroundTint="?attr/searchForm"
+            android:backgroundTint="?attr/colorSearchForm"
             android:src="@drawable/button1_lm"
-            app:tint="?attr/dataInSearchForm" />
+            app:tint="?attr/colorDataInSearchForm" />
 
         <FrameLayout
             android:id="@+id/clean_button"
@@ -65,11 +65,18 @@
                 android:layout_height="12dp"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="?attr/searchForm"
+                android:backgroundTint="?attr/colorSearchForm"
                 android:src="@drawable/button_clear"
-                app:tint="?attr/dataInSearchForm" />
+                app:tint="?attr/colorDataInSearchForm" />
         </FrameLayout>
 
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="28dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

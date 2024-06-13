@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.R
 
 class SearchActivity : AppCompatActivity() {
 

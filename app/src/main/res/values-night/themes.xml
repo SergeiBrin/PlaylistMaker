@@ -11,8 +11,13 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/white</item>
 
-        <item name="searchForm">@color/white</item>
-        <item name="dataInSearchForm">@color/navy_blue</item>
+        <!-- Search Screen -->
+        <item name="colorSearchForm">@color/white</item>
+        <item name="colorDataInSearchForm">@color/navy_blue</item>
+        <item name="colorSearchTextSecondary">@color/white</item>
+        <item name="colorSearchIcon">@color/white</item>
+
+
         <item name="iconsOnTheSettingsScreen">@color/white</item>
 
         <!-- Background and icon color. -->
