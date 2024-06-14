@@ -7,10 +7,10 @@
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/navy_blue</item>
-        <item name="android:textSize">@dimen/text_medium</item>
-        <item name="cornerRadius">@dimen/button_fillet</item>
+        <item name="android:textSize">@dimen/text_medium_22sp</item>
+        <item name="cornerRadius">@dimen/button_fillet_16dp</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconPadding">@dimen/margin</item>
+        <item name="iconPadding">@dimen/margin_16dp</item>
         <item name="iconTint">@color/navy_blue</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
@@ -19,8 +19,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginStart">@dimen/margin</item>
-        <item name="android:textSize">@dimen/text_regular</item>
+        <item name="android:layout_marginStart">@dimen/margin_16dp</item>
+        <item name="android:textSize">@dimen/text_regular_16sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
@@ -29,13 +29,13 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical|end</item>
-        <item name="android:layout_marginEnd">@dimen/margin</item>
+        <item name="android:layout_marginEnd">@dimen/margin_16dp</item>
         <item name="android:tint">?attr/iconsOnTheSettingsScreen</item>
     </style>
 
     <style name="HeaderFrameLayout">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/settings_layout_size</item>
+        <item name="android:layout_height">@dimen/settings_layout_size_56dp</item>
     </style>
     
     <style name="ArrowBackHeaderIcon">
@@ -48,11 +48,21 @@
     </style>
 
     <style name="HeaderText">
-        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textSize">@dimen/text_medium_22sp</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="ArtistAndTimeTextForSongList">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">?attr/colorSearchTextSecondary</item>
+        <item name="android:textSize">@dimen/text_regular_11sp</item>
     </style>
 </resources>

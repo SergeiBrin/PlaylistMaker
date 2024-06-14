@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="header">56dp</dimen>
-    <dimen name="settings_layout_size">56dp</dimen>
-    <dimen name="margin">16dp</dimen>
-    <dimen name="button_fillet">16dp</dimen>
-    <dimen name="text_regular">16sp</dimen>
-    <dimen name="text_medium">22sp</dimen>
+    <dimen name="header_56dp">56dp</dimen>
+    <dimen name="settings_layout_size_56dp">56dp</dimen>
+    <dimen name="search_line_36dp">36dp</dimen>
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_14dp">14dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_28dp">28dp</dimen>
+    <dimen name="margin_48dp">48dp</dimen>
+    <dimen name="margin_64dp">64dp</dimen>
+    <dimen name="button_fillet_8dp">8dp</dimen>
+    <dimen name="button_fillet_16dp">16dp</dimen>
+    <dimen name="image_size_12dp">12dp</dimen>
+    <dimen name="image_size_24dp">24dp</dimen>
+    <dimen name="image_size_45dp">45dp</dimen>
+    <dimen name="max_width_40dp">40dp</dimen>
+    <dimen name="max_width_120dp">200dp</dimen>
+    <dimen name="layout_size_60dp">60dp</dimen>
+    <dimen name="text_regular_16sp">16sp</dimen>
+    <dimen name="text_regular_11sp">11sp</dimen>
+    <dimen name="text_medium_22sp">22sp</dimen>
 </resources>

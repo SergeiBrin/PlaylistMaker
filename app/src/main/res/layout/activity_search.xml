@@ -15,17 +15,17 @@
 
         <TextView
             style="@style/HeaderText"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="@dimen/margin_64dp"
             android:text="@string/search" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="@dimen/margin"
-        android:layout_marginEnd="@dimen/margin">
+        android:layout_height="@dimen/search_line_36dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:layout_marginEnd="@dimen/margin_16dp">
 
         <EditText
             android:id="@+id/editing_search_text"
@@ -37,17 +37,17 @@
             android:hint="@string/search"
             android:inputType="text"
             android:lines="1"
-            android:paddingStart="48dp"
-            android:paddingEnd="48dp"
+            android:paddingStart="@dimen/margin_48dp"
+            android:paddingEnd="@dimen/margin_48dp"
             android:textColor="@color/navy_blue"
             android:textCursorDrawable="@drawable/text_entry_pointer"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_regular_16sp" />
 
         <ImageView
-            android:layout_width="@dimen/margin"
-            android:layout_height="@dimen/margin"
+            android:layout_width="@dimen/margin_16dp"
+            android:layout_height="@dimen/margin_16dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:backgroundTint="?attr/colorSearchForm"
             android:src="@drawable/button1_lm"
             app:tint="?attr/colorDataInSearchForm" />
@@ -61,10 +61,10 @@
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="@dimen/image_size_12dp"
+                android:layout_height="@dimen/image_size_12dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/margin_16dp"
                 android:backgroundTint="?attr/colorSearchForm"
                 android:src="@drawable/button_clear"
                 app:tint="?attr/colorDataInSearchForm" />
@@ -76,7 +76,7 @@
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="@dimen/margin_28dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

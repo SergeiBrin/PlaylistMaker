@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.adapter.TracksAdapter
@@ -49,7 +50,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
+                clearButton.isVisible = !s.isNullOrEmpty()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -76,13 +77,6 @@ class SearchActivity : AppCompatActivity() {
         inputText = savedInstanceState.getString(SEARCH_TEXT_KEY)
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        if (s.isNullOrEmpty()) {
-            return View.GONE
-        } else {
-            return View.VISIBLE
-        }
-    }
 
     private fun hideKeyboard(inputEditText: EditText) {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

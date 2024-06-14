@@ -7,6 +7,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
 
 class TracksAdapter(val tracks: List<Track>): RecyclerView.Adapter<TracksViewHolder> (){
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track, parent, false)
         return TracksViewHolder(view)
