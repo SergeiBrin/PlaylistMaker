@@ -10,7 +10,10 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.adapter.TracksAdapter
+import com.example.playlistmaker.util.getTrackModels
 
 class SearchActivity : AppCompatActivity() {
 
@@ -35,7 +38,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val clearButton = findViewById<FrameLayout>(R.id.clean_button)
-
         clearButton.setOnClickListener {
             inputEditText.setText("")
             hideKeyboard(inputEditText)
@@ -56,6 +58,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.addTextChangedListener(textWatcher)
+
+        val tracks = getTrackModels()
+        val recyclerView = findViewById<RecyclerView>(R.id.recycle_view)
+        val adapter = TracksAdapter(tracks)
+        recyclerView.adapter = adapter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
