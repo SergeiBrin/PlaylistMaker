@@ -13,7 +13,4 @@
     <string name="my_email">starodumovtmt@yandex.ru</string>
     <string name="letter_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="letter_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
-    <string name="tools_artist_name_text">The Beatles</string>
-    <string name="tools_track_time_text">22:55</string>
-    <string name="tools_track_name_text">Yesterday (Remastered)</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.playlistmaker.adapter
 
-import android.view.RoundedCorner
+import android.content.Context
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,8 +23,15 @@ class TracksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         trackTime.text = model.trackTime
         Glide.with(itemView)
             .load(model.artworkUrl100)
-            .transform(RoundedCorners(8))
+            .transform(RoundedCorners(dpToPx(8f, itemView.context)))
             .placeholder(R.drawable.placeholder)
             .into(artworkUrl100)
+    }
+
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics).toInt()
     }
 }
