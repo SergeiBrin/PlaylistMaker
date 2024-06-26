@@ -1,123 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/header"
+        style="@style/HeaderFrameLayout"
         android:layout_marginBottom="24dp">
 
         <ImageView
-            android:id="@+id/arrow_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="1dp"
-            android:layout_marginStart="@dimen/margin_from_edge"
-            android:src="@drawable/arrow_back_lm" />
+            android:id="@+id/arrow_back_settings_screen"
+            style="@style/ArrowBackHeaderIcon" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="60dp"
-            android:text="@string/settings"
-            android:textColor="@color/navy_blue"
-            android:textSize="@dimen/text_medium" />
+            style="@style/HeaderText"
+            android:layout_marginStart="64dp"
+            android:text="@string/settings" />
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_layout_size">
+        style="@style/HeaderFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin_from_edge"
-            android:text="@string/switcher_dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_regular" />
+            style="@style/RegularTextOnSettingsScreen"
+            android:text="@string/switcher_dark_theme" />
 
         <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="6dp"
+            style="@style/IconsOnTheSettingsScreen"
+            android:layout_marginEnd="8dp"
             android:switchMinWidth="56dp"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_layout_size">
+        android:id="@+id/btn_share_app"
+        style="@style/HeaderFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin_from_edge"
-            android:text="@string/action_share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_regular" />
+            style="@style/RegularTextOnSettingsScreen"
+            android:text="@string/action_share_app" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="@dimen/margin_from_edge"
+            style="@style/IconsOnTheSettingsScreen"
             android:src="@drawable/share_lm" />
+
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_layout_size">
+        android:id="@+id/btn_support_contact"
+        style="@style/HeaderFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin_from_edge"
-            android:text="@string/support_contact"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_regular" />
+            style="@style/RegularTextOnSettingsScreen"
+            android:text="@string/support_contact" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="@dimen/margin_from_edge"
+            style="@style/IconsOnTheSettingsScreen"
             android:src="@drawable/support_lm" />
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_layout_size">
+        android:id="@+id/btn_user_agreement"
+        style="@style/HeaderFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin_from_edge"
-            android:text="@string/button_user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_regular" />
+            style="@style/RegularTextOnSettingsScreen"
+            android:text="@string/button_user_agreement" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="@dimen/margin_from_edge"
+            style="@style/IconsOnTheSettingsScreen"
             android:src="@drawable/arrow_forward_lm" />
-    </FrameLayout>
 
+    </FrameLayout>
 
 </LinearLayout>

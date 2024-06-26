@@ -1,71 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bright_blue"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/margin_16dp">
 
     <TextView
         android:id="@+id/app_name"
+        style="@style/HeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_medium" />
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/search_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        style="@style/HomeScreenButtonStyle"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
         android:text="@string/search"
-        android:textAllCaps="false"
-        android:textColor="@color/navy_blue"
-        android:textSize="@dimen/text_medium"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/button1_lm"
-        app:iconGravity="textStart"
-        app:iconPadding="16dp"
-        app:iconTint="@color/navy_blue" />
+        app:icon="@drawable/button1_lm" />
 
     <Button
         android:id="@+id/media_library_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        style="@style/HomeScreenButtonStyle"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
         android:text="@string/media_library"
-        android:textAllCaps="false"
-        android:textColor="@color/navy_blue"
-        android:textSize="@dimen/text_medium"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/button2_lm"
-        app:iconGravity="textStart"
-        app:iconPadding="16dp"
-        app:iconTint="@color/navy_blue" />
+        app:icon="@drawable/button2_lm" />
 
     <Button
         android:id="@+id/settings_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
+        style="@style/HomeScreenButtonStyle"
         android:text="@string/settings"
         android:textAllCaps="false"
-        android:textColor="@color/navy_blue"
-        android:textSize="@dimen/text_medium"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/button3_lm"
-        app:iconGravity="textStart"
-        app:iconPadding="16dp"
-        app:iconTint="@color/navy_blue" />
+        app:icon="@drawable/button3_lm" />
 
 </LinearLayout>

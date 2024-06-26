@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorSearchForm" format="color" />
+    <attr name="colorDataInSearchForm" format="color" />
+    <attr name="iconsOnTheSettingsScreen" format="color" />
+    <attr name="colorSearchTextSecondary" format="color" />
+    <attr name="colorSearchIcon" format="color" />
+</resources>
