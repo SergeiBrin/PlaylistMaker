@@ -5,4 +5,5 @@
     <attr name="iconsOnTheSettingsScreen" format="color" />
     <attr name="colorSearchTextSecondary" format="color" />
     <attr name="colorSearchIcon" format="color" />
+    <attr name="colorRefreshButton" format="color" />
 </resources>

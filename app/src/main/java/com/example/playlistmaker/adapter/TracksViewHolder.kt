@@ -11,7 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
 
-class TracksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TracksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackName = itemView.findViewById<TextView>(R.id.track_name)
     private val artistName = itemView.findViewById<TextView>(R.id.artist_name)
     private val trackTime = itemView.findViewById<TextView>(R.id.track_time)

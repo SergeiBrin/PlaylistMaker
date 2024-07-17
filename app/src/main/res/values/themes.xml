@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
@@ -15,11 +15,12 @@
         <item name="colorDataInSearchForm">@color/light_gray</item>
         <item name="colorSearchTextSecondary">@color/light_gray</item>
         <item name="colorSearchIcon">@color/light_gray</item>
+        <item name="colorRefreshButton">@color/white</item>
 
         <item name="iconsOnTheSettingsScreen">@color/very_light_gray</item>
 
         <!-- Background and icon color. -->
-        <item name="android:background">@color/white</item>
+<!--        <item name="android:background">@color/white</item>-->
         <item name="android:textColorHint">@color/light_gray</item>
 
         <!-- Status bar color. -->

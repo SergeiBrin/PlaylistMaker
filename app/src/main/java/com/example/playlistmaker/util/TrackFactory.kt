@@ -3,8 +3,8 @@ package com.example.playlistmaker.util
 import com.example.playlistmaker.model.Track
 
 
-fun getTrackModels(): List<Track> {
-    return listOf(
+fun getTrackModels(): MutableList<Track> {
+    return mutableListOf(
         Track(
             "Smells Like Teen Spirit",
             "Nirvana",
