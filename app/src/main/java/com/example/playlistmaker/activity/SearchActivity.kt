@@ -20,6 +20,7 @@ import com.example.playlistmaker.api.ItunesApiService
 import com.example.playlistmaker.deserializer.TrackDeserializer
 import com.example.playlistmaker.model.Track
 import com.example.playlistmaker.model.TrackResponse
+import com.example.playlistmaker.util.createRetrofit
 import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,13 +31,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
     private var inputText: String? = ""
     private val tracks: MutableList<Track> = mutableListOf()
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(Track::class.java, TrackDeserializer())
-        .create()
-    private val apiService = Retrofit.Builder()
-        .baseUrl("https://itunes.apple.com")
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()
+    private val apiService = createRetrofit(
+        "https://itunes.apple.com",
+        GsonBuilder()
+            .registerTypeAdapter(Track::class.java, TrackDeserializer())
+            .create())
         .create(ItunesApiService::class.java)
     private lateinit var placeholderImage: ImageView
     private lateinit var placeholderText: TextView
@@ -116,15 +115,9 @@ class SearchActivity : AppCompatActivity() {
         inputText = savedInstanceState.getString(SEARCH_TEXT_KEY)
     }
 
-
-    private fun hideKeyboard(inputEditText: EditText) {
-        val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
-    }
-
     private fun searchTracks() {
         makeViewsInvisible()
+        clearTrackListAndUpdateAdapter()
 
         apiService.search(inputText!!).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
@@ -132,7 +125,6 @@ class SearchActivity : AppCompatActivity() {
                     val result = response.body()?.tracks
 
                     if (result.isNullOrEmpty()) {
-                        clearTrackListAndUpdateAdapter()
                         placeholderImage.visibility = View.VISIBLE
                         placeholderText.visibility = View.VISIBLE
 
@@ -173,5 +165,11 @@ class SearchActivity : AppCompatActivity() {
         placeholderText.text = getString(R.string.problems_when_searching_for_a_tracks)
 
         refreshButton.visibility = View.VISIBLE
+    }
+
+    private fun hideKeyboard(inputEditText: EditText) {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
     }
 }
