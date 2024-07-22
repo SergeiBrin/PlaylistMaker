@@ -8,18 +8,23 @@
     <dimen name="margin_12dp">12dp</dimen>
     <dimen name="margin_14dp">14dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="margin_48dp">48dp</dimen>
     <dimen name="margin_64dp">64dp</dimen>
+    <dimen name="margin_80dp">80dp</dimen>
     <dimen name="button_fillet_8dp">8dp</dimen>
     <dimen name="button_fillet_16dp">16dp</dimen>
     <dimen name="image_size_12dp">12dp</dimen>
     <dimen name="image_size_24dp">24dp</dimen>
     <dimen name="image_size_45dp">45dp</dimen>
+    <dimen name="image_size_120dp">120dp</dimen>
     <dimen name="max_width_40dp">40dp</dimen>
-    <dimen name="max_width_120dp">200dp</dimen>
+    <dimen name="max_width_200dp">200dp</dimen>
     <dimen name="layout_size_60dp">60dp</dimen>
-    <dimen name="text_regular_16sp">16sp</dimen>
     <dimen name="text_regular_11sp">11sp</dimen>
+    <dimen name="text_regular_14sp">14sp</dimen>
+    <dimen name="text_regular_16sp">16sp</dimen>
+    <dimen name="text_medium_19sp">19sp</dimen>
     <dimen name="text_medium_22sp">22sp</dimen>
 </resources>

@@ -13,4 +13,6 @@
     <string name="my_email">starodumovtmt@yandex.ru</string>
     <string name="letter_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="letter_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="no_tracks_found">Ничего не нашлось</string>
+    <string name="problems_when_searching_for_a_tracks">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
 </resources>

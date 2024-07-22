@@ -37,15 +37,17 @@
             tools:text="Yesterday (Remastered)" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/ArtistAndTimeTextForSongList"
-                android:maxWidth="@dimen/max_width_120dp"
-                tools:text="The Beatles" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Beatles" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -58,8 +60,9 @@
             <TextView
                 android:id="@+id/track_time"
                 style="@style/ArtistAndTimeTextForSongList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_4dp"
-                android:maxWidth="@dimen/max_width_40dp"
                 tools:text="22:55" />
 
         </LinearLayout>
