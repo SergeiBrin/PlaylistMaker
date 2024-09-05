@@ -6,9 +6,11 @@
         <item name="colorOnPrimary">@color/black</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/navy_blue</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/navy_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorOnHeader">@color/navy_blue</item>
 
         <!-- Search Screen -->
         <item name="colorSearchForm">@color/very_light_gray</item>
@@ -16,6 +18,8 @@
         <item name="colorSearchTextSecondary">@color/light_gray</item>
         <item name="colorSearchIcon">@color/light_gray</item>
         <item name="colorRefreshButton">@color/white</item>
+        <item name="colorSwitchThumb">@color/light_gray</item>
+        <item name="colorSwitchTrack">@color/very_light_gray</item>
 
         <item name="iconsOnTheSettingsScreen">@color/very_light_gray</item>
 

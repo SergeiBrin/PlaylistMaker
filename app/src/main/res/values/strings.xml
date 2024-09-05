@@ -15,4 +15,7 @@
     <string name="letter_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="no_tracks_found">Ничего не нашлось</string>
     <string name="problems_when_searching_for_a_tracks">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="search_history">Вы искали</string>
+    <string name="clear_search_history">Очистить историю</string>
+    <string name="update_search_activity">Обновить</string>
 </resources>

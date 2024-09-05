@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackDeserializer : JsonDeserializer<Track> {
+
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type?,
@@ -16,6 +17,7 @@ class TrackDeserializer : JsonDeserializer<Track> {
     ): Track {
         val jsonObject = json.asJsonObject
 
+        val trackId = jsonObject.get("trackId").asInt
         val trackName = jsonObject.get("trackName").asString
         val artistName = jsonObject.get("artistName").asString
         val trackTime = jsonObject.get("trackTimeMillis").asLong
@@ -23,6 +25,6 @@ class TrackDeserializer : JsonDeserializer<Track> {
 
         val modifiedTrackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTime)
 
-        return Track(trackName, artistName, modifiedTrackTime, artworkUrl100)
+        return Track(trackId, trackName, artistName, modifiedTrackTime, artworkUrl100)
     }
 }
