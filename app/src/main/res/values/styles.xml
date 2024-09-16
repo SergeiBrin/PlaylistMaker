@@ -44,7 +44,7 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:src">@drawable/arrow_back_lm</item>
-        <item name="android:tint">?attr/colorOnSecondary</item>
+        <item name="android:tint">?attr/colorOnHeader</item>
     </style>
 
     <style name="HeaderText">
@@ -53,7 +53,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textColor">?attr/colorOnHeader</item>
     </style>
 
     <style name="ArtistAndTimeTextForSongList">
@@ -63,4 +63,5 @@
         <item name="android:textColor">?attr/colorSearchTextSecondary</item>
         <item name="android:textSize">@dimen/text_regular_11sp</item>
     </style>
+
 </resources>

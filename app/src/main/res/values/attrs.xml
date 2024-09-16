@@ -6,4 +6,7 @@
     <attr name="colorSearchTextSecondary" format="color" />
     <attr name="colorSearchIcon" format="color" />
     <attr name="colorRefreshButton" format="color" />
+    <attr name="colorSwitchThumb" format="color" />
+    <attr name="colorSwitchTrack" format="color" />
+    <attr name="colorOnHeader" format="color" />
 </resources>

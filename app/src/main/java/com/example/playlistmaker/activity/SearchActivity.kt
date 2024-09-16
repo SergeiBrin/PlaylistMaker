@@ -7,19 +7,24 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.adapter.TracksAdapter
 import com.example.playlistmaker.api.ItunesApiService
 import com.example.playlistmaker.deserializer.TrackDeserializer
 import com.example.playlistmaker.model.Track
 import com.example.playlistmaker.model.TrackResponse
+import com.example.playlistmaker.sharedpref.SearchHistory
+import com.example.playlistmaker.sharedpref.getSearchHistory
 import com.example.playlistmaker.util.createRetrofit
 import com.google.gson.GsonBuilder
 import retrofit2.Call
@@ -27,18 +32,34 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
-    private var inputText: String? = ""
-    private val tracks: MutableList<Track> = mutableListOf()
     private val apiService = createRetrofit(
         "https://itunes.apple.com",
         GsonBuilder()
             .registerTypeAdapter(Track::class.java, TrackDeserializer())
             .create())
         .create(ItunesApiService::class.java)
+
+    private lateinit var arrowBackButton: ImageView
+
+    private lateinit var inputEditText: EditText
+    private var inputText: String? = ""
+    private lateinit var clearButton: FrameLayout
+
+    // Search tracks
+    private lateinit var trackAdapter: TracksAdapter
+    private lateinit var searchTrackRecyclerView: RecyclerView
     private lateinit var placeholderImage: ImageView
     private lateinit var placeholderText: TextView
     private lateinit var refreshButton: FrameLayout
-    private lateinit var adapter: TracksAdapter
+    private val tracks: MutableList<Track> = mutableListOf()
+
+    // Search History
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var trackSearchHistoryAdapter: TrackSearchHistoryAdapter
+    private lateinit var historyRecycleView: RecyclerView
+    private lateinit var historyTrackContainer: LinearLayout
+    private lateinit var clearSearchHistoryButton: Button
+    private val historyTracks: MutableList<Track> = mutableListOf()
 
     companion object {
         const val SEARCH_TEXT_KEY = "SEARCH_TEXT"
@@ -48,31 +69,71 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        placeholderImage = findViewById(R.id.search_placeholder_image)
-        placeholderText = findViewById(R.id.search_placeholder_text)
-        refreshButton = findViewById(R.id.search_refresh_button)
+        searchHistory = SearchHistory(getSearchHistory(this))
+        searchHistory.downloadSearchHistory()
 
-        val arrowBackButton = findViewById<ImageView>(R.id.arrow_back_search_screen)
-        arrowBackButton.setOnClickListener {
-            finish()
-        }
-
-        val inputEditText = findViewById<EditText>(R.id.editing_search_text)
+        inputEditText = findViewById(R.id.editing_search_text)
+        // Восстановление текста в поисковой строке
         if (savedInstanceState != null) {
             inputEditText.setText(inputText)
         }
 
-        val clearButton = findViewById<FrameLayout>(R.id.clean_button)
+        arrowBackButton = findViewById(R.id.arrow_back_search_screen)
+        clearButton = findViewById(R.id.clean_button)
+
+        trackAdapter = TracksAdapter(searchHistory, tracks)
+        searchTrackRecyclerView = findViewById(R.id.recycle_view_tracks_search)
+        placeholderImage = findViewById(R.id.search_placeholder_image)
+        placeholderText = findViewById(R.id.search_placeholder_text)
+        refreshButton = findViewById(R.id.search_refresh_button)
+
+        trackSearchHistoryAdapter = TrackSearchHistoryAdapter(historyTracks)
+        historyRecycleView = findViewById(R.id.recycle_view_tracks_search_history)
+        historyTrackContainer = findViewById(R.id.history_track_container)
+        clearSearchHistoryButton = findViewById(R.id.clear_search_history_button)
+
+        searchTrackRecyclerView.adapter = trackAdapter
+        historyRecycleView.adapter = trackSearchHistoryAdapter
+
+        // Возврат к предыдущему активити
+        arrowBackButton.setOnClickListener {
+            finish()
+        }
+
+        // Удаление текста в поисковом запросе
         clearButton.setOnClickListener {
             inputEditText.setText("")
             hideKeyboard(inputEditText)
-            clearTrackListAndUpdateAdapter()
+            updateTrackList()
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recycle_view)
-        adapter = TracksAdapter(tracks)
-        recyclerView.adapter = adapter
+        // Повтор запроса
+        refreshButton.setOnClickListener {
+            searchTracks()
+        }
 
+        // Очистка истории поиска
+        clearSearchHistoryButton.setOnClickListener {
+            searchHistory.deleteSearchHistory()
+            updateSearchHistoryTrackList()
+            historyTrackContainer.isVisible = false
+        }
+
+        // Фокус для поисковой строки
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
+            val isHistoryVisible = hasFocus && inputEditText.text.isEmpty()
+            if (isHistoryVisible) {
+                updateSearchHistoryTrackList()
+
+                if (historyTracks.isNotEmpty()) {
+                    historyTrackContainer.isVisible = true
+                } else {
+                    historyTrackContainer.isVisible = false
+                }
+            }
+        }
+
+        // Методы ввода текста в поисковой строке
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Пока пусто
@@ -80,6 +141,22 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
+
+                 val isSearchHistoryVisible = if (
+                    inputEditText.hasFocus()
+                    && s?.isEmpty() == true
+                    && SearchHistory.historyTrackList.isNotEmpty()
+                    ) true else false
+
+                if (isSearchHistoryVisible) {
+                    updateSearchHistoryTrackList()
+                    makeViewsInvisible()
+                    searchTrackRecyclerView.isVisible = false
+                    historyTrackContainer.isVisible = true
+                } else {
+                    historyTrackContainer.isVisible = false
+                    searchTrackRecyclerView.isVisible = true
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -96,10 +173,6 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
-
-        refreshButton.setOnClickListener {
-            searchTracks() // Повторить запрос
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -113,9 +186,17 @@ class SearchActivity : AppCompatActivity() {
         inputText = savedInstanceState.getString(SEARCH_TEXT_KEY)
     }
 
+    /**
+     * При завершении работы активити список треков истории сохраняется в shared preferences
+     */
+    override fun onStop() {
+        super.onStop()
+        searchHistory.saveSearchHistoryInPreferences()
+    }
+
     private fun searchTracks() {
         makeViewsInvisible()
-        clearTrackListAndUpdateAdapter()
+        updateTrackList()
 
         apiService.search(inputText!!).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
@@ -123,6 +204,7 @@ class SearchActivity : AppCompatActivity() {
                     val result = response.body()?.tracks
 
                     if (result.isNullOrEmpty()) {
+                        historyTrackContainer.isVisible = false
                         placeholderImage.visibility = View.VISIBLE
                         placeholderText.visibility = View.VISIBLE
 
@@ -130,7 +212,7 @@ class SearchActivity : AppCompatActivity() {
                         placeholderText.text = getString(R.string.no_tracks_found)
                     } else {
                         tracks.addAll(result)
-                        adapter.notifyDataSetChanged()
+                        trackAdapter.notifyDataSetChanged()
                     }
                 } else {
                     processResponseWithError()
@@ -143,18 +225,6 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
-    private fun clearTrackListAndUpdateAdapter() {
-        tracks.clear()
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun makeViewsInvisible() {
-        placeholderImage.visibility = View.INVISIBLE
-        placeholderText.visibility = View.INVISIBLE
-        refreshButton.visibility = View.INVISIBLE
-
-    }
-
     private fun processResponseWithError() {
         placeholderImage.visibility = View.VISIBLE
         placeholderText.visibility = View.VISIBLE
@@ -165,9 +235,25 @@ class SearchActivity : AppCompatActivity() {
         refreshButton.visibility = View.VISIBLE
     }
 
+    private fun makeViewsInvisible() {
+        placeholderImage.visibility = View.INVISIBLE
+        placeholderText.visibility = View.INVISIBLE
+        refreshButton.visibility = View.INVISIBLE
+    }
+
+    private fun updateTrackList() {
+        tracks.clear()
+        trackAdapter.notifyDataSetChanged()
+    }
+
+    private fun updateSearchHistoryTrackList() {
+        historyTracks.clear()
+        historyTracks.addAll(SearchHistory.historyTrackList)
+        trackSearchHistoryAdapter.notifyDataSetChanged()
+    }
+
     private fun hideKeyboard(inputEditText: EditText) {
-        val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
     }
 }

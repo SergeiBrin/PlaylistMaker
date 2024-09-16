@@ -11,6 +11,7 @@
     <dimen name="margin_24dp">24dp</dimen>
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="margin_48dp">48dp</dimen>
+    <dimen name="margin_56dp">56dp</dimen>
     <dimen name="margin_64dp">64dp</dimen>
     <dimen name="margin_80dp">80dp</dimen>
     <dimen name="button_fillet_8dp">8dp</dimen>
@@ -21,7 +22,10 @@
     <dimen name="image_size_120dp">120dp</dimen>
     <dimen name="max_width_40dp">40dp</dimen>
     <dimen name="max_width_200dp">200dp</dimen>
+    <dimen name="layout_size_36dp">36dp</dimen>
+    <dimen name="layout_size_52dp">52dp</dimen>
     <dimen name="layout_size_60dp">60dp</dimen>
+    <dimen name="layout_size_148dp">148dp</dimen>
     <dimen name="text_regular_11sp">11sp</dimen>
     <dimen name="text_regular_14sp">14sp</dimen>
     <dimen name="text_regular_16sp">16sp</dimen>
