@@ -29,6 +29,7 @@
     <dimen name="text_regular_11sp">11sp</dimen>
     <dimen name="text_regular_14sp">14sp</dimen>
     <dimen name="text_regular_16sp">16sp</dimen>
+    <dimen name="text_medium_14sp">14sp</dimen>
     <dimen name="text_medium_19sp">19sp</dimen>
     <dimen name="text_medium_22sp">22sp</dimen>
 </resources>
