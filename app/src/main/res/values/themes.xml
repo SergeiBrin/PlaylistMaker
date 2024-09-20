@@ -25,7 +25,6 @@
 
         <!-- Background and icon color. -->
         <item name="themeBackground">@color/white</item>
-<!--        <item name="android:background">@color/white</item>-->
         <item name="android:textColorHint">@color/light_gray</item>
 
         <!-- Status bar color. -->
