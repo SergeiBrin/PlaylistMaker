@@ -1,12 +1,18 @@
 package com.example.playlistmaker.adapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.activity.PlayerActivity
 import com.example.playlistmaker.model.Track
 
-class TrackSearchHistoryAdapter(val historyTracks: List<Track>) : RecyclerView.Adapter<TracksViewHolder>() {
+class TrackSearchHistoryAdapter(
+    val context: Context,
+    val historyTracks: List<Track>
+) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track, parent, false)
@@ -18,6 +24,16 @@ class TrackSearchHistoryAdapter(val historyTracks: List<Track>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
-        holder.bind(historyTracks[position])
+        val track = historyTracks[position]
+        holder.bind(track)
+
+        holder.itemView.setOnClickListener {
+            val playerIntent = Intent(context, PlayerActivity::class.java).apply {
+                putExtra("Track", track)
+            }
+
+            context.startActivity(playerIntent)
+        }
+
     }
 }

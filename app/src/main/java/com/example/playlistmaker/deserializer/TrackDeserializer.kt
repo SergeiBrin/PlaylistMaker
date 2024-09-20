@@ -22,9 +22,23 @@ class TrackDeserializer : JsonDeserializer<Track> {
         val artistName = jsonObject.get("artistName").asString
         val trackTime = jsonObject.get("trackTimeMillis").asLong
         val artworkUrl100 = jsonObject.get("artworkUrl100").asString
+        val collectionName = jsonObject.get("collectionName").asString
+        val releaseDate = jsonObject.get("releaseDate").asString
+        val primaryGenreName = jsonObject.get("primaryGenreName").asString
+        val country = jsonObject.get("country").asString
 
         val modifiedTrackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTime)
 
-        return Track(trackId, trackName, artistName, modifiedTrackTime, artworkUrl100)
+        return Track(
+            trackId,
+            trackName,
+            artistName,
+            modifiedTrackTime,
+            artworkUrl100,
+            collectionName,
+            releaseDate,
+            primaryGenreName,
+            country
+        )
     }
 }

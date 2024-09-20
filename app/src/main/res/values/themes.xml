@@ -24,6 +24,7 @@
         <item name="iconsOnTheSettingsScreen">@color/very_light_gray</item>
 
         <!-- Background and icon color. -->
+        <item name="themeBackground">@color/white</item>
 <!--        <item name="android:background">@color/white</item>-->
         <item name="android:textColorHint">@color/light_gray</item>
 
@@ -33,7 +34,7 @@
     </style>
 
     <style name="Theme.MainScreen" parent="Theme.PlaylistMaker">
-        <item name="android:background">@color/bright_blue</item>
+        <item name="themeBackground">@color/bright_blue</item>
         <item name="android:statusBarColor">@color/bright_blue</item>
         <item name="android:tint">@color/light_gray</item>
     </style>

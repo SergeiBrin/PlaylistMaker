@@ -81,13 +81,13 @@ class SearchActivity : AppCompatActivity() {
         arrowBackButton = findViewById(R.id.arrow_back_search_screen)
         clearButton = findViewById(R.id.clean_button)
 
-        trackAdapter = TracksAdapter(searchHistory, tracks)
+        trackAdapter = TracksAdapter(this@SearchActivity, searchHistory, tracks)
         searchTrackRecyclerView = findViewById(R.id.recycle_view_tracks_search)
         placeholderImage = findViewById(R.id.search_placeholder_image)
         placeholderText = findViewById(R.id.search_placeholder_text)
         refreshButton = findViewById(R.id.search_refresh_button)
 
-        trackSearchHistoryAdapter = TrackSearchHistoryAdapter(historyTracks)
+        trackSearchHistoryAdapter = TrackSearchHistoryAdapter(this@SearchActivity, historyTracks)
         historyRecycleView = findViewById(R.id.recycle_view_tracks_search_history)
         historyTrackContainer = findViewById(R.id.history_track_container)
         clearSearchHistoryButton = findViewById(R.id.clear_search_history_button)

@@ -47,7 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="Beatles" />
+                tools:text="Scorpions the best" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                 app:tint="?attr/colorSearchIcon" />
 
             <TextView
-                android:id="@+id/track_time"
+                android:id="@+id/playback_time"
                 style="@style/ArtistAndTimeTextForSongList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
