@@ -25,7 +25,7 @@
         <item name="iconsOnTheSettingsScreen">@color/white</item>
 
         <!-- Background and icon color. -->
-<!--        <item name="android:background">@color/navy_blue</item>-->
+        <item name="themeBackground">@color/navy_blue</item>
         <item name="android:textColorHint">@color/navy_blue</item>
 
         <!-- Status bar color. -->

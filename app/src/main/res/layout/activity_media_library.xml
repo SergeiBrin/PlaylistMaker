@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="?attr/themeBackground">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/in_developing"
-        android:textSize="@dimen/text_medium_22sp" />
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="Пожалуйста, подождите.\nМы тут что-то крутим! 🛠️"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="26sp" />
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/gear"
-        android:layout_margin="10dp" />
+</FrameLayout>
 
-</LinearLayout>
+
+
