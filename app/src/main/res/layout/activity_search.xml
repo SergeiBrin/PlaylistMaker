@@ -89,6 +89,15 @@
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="@dimen/layout_size_44dp"
+            android:layout_height="@dimen/layout_size_44dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_112dp"
+            android:indeterminateTint="@color/bright_blue"
+            android:visibility="gone" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
