@@ -26,6 +26,7 @@ class TrackDeserializer : JsonDeserializer<Track> {
         val releaseDate = jsonObject.get("releaseDate").asString
         val primaryGenreName = jsonObject.get("primaryGenreName").asString
         val country = jsonObject.get("country").asString
+        val previewUrl = jsonObject.get("previewUrl").asString
 
         val modifiedTrackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTime)
 
@@ -38,7 +39,8 @@ class TrackDeserializer : JsonDeserializer<Track> {
             collectionName,
             releaseDate,
             primaryGenreName,
-            country
+            country,
+            previewUrl
         )
     }
 }
