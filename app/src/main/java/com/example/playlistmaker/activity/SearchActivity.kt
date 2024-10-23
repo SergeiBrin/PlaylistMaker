@@ -1,7 +1,10 @@
 package com.example.playlistmaker.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,6 +15,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -61,8 +65,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearSearchHistoryButton: Button
     private val historyTracks: MutableList<Track> = mutableListOf()
 
+    // For auto search in 2 seconds
+    private lateinit var progressBar: ProgressBar
+    private val searchRunnable = Runnable { searchTracks() }
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var isClickAllowed = true
+
     companion object {
-        const val SEARCH_TEXT_KEY = "SEARCH_TEXT"
+        private const val SEARCH_TEXT_KEY = "SEARCH_TEXT"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,14 +93,33 @@ class SearchActivity : AppCompatActivity() {
 
         arrowBackButton = findViewById(R.id.arrow_back_search_screen)
         clearButton = findViewById(R.id.clean_button)
+        progressBar = findViewById(R.id.progress_bar)
 
-        trackAdapter = TracksAdapter(this@SearchActivity, searchHistory, tracks)
+        trackAdapter = TracksAdapter(
+//            this@SearchActivity,
+//            searchHistory,
+            tracks) { track ->
+            if (clickDebounce()) {
+                searchHistory.saveTrackInHistoryTrackList(track)
+                val playerIntent = Intent(this, PlayerActivity::class.java).apply {
+                    putExtra("Track", track)
+                }
+                startActivity(playerIntent)
+            }
+        }
+
         searchTrackRecyclerView = findViewById(R.id.recycle_view_tracks_search)
         placeholderImage = findViewById(R.id.search_placeholder_image)
         placeholderText = findViewById(R.id.search_placeholder_text)
         refreshButton = findViewById(R.id.search_refresh_button)
 
-        trackSearchHistoryAdapter = TrackSearchHistoryAdapter(this@SearchActivity, historyTracks)
+        trackSearchHistoryAdapter = TrackSearchHistoryAdapter(historyTracks) { track ->
+            val playerIntent = Intent(this, PlayerActivity::class.java).apply {
+                putExtra("Track", track)
+            }
+            startActivity(playerIntent)
+        }
+
         historyRecycleView = findViewById(R.id.recycle_view_tracks_search_history)
         historyTrackContainer = findViewById(R.id.history_track_container)
         clearSearchHistoryButton = findViewById(R.id.clear_search_history_button)
@@ -151,12 +183,15 @@ class SearchActivity : AppCompatActivity() {
                 if (isSearchHistoryVisible) {
                     updateSearchHistoryTrackList()
                     makeViewsInvisible()
+                    updateTrackList()
                     searchTrackRecyclerView.isVisible = false
                     historyTrackContainer.isVisible = true
                 } else {
                     historyTrackContainer.isVisible = false
                     searchTrackRecyclerView.isVisible = true
                 }
+
+                searchDebounce(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -194,6 +229,16 @@ class SearchActivity : AppCompatActivity() {
         searchHistory.saveSearchHistoryInPreferences()
     }
 
+    private fun searchDebounce(s: CharSequence?) {
+        if (s.isNullOrEmpty()) {
+            handler.removeCallbacks(searchRunnable)
+            progressBar.isVisible = false
+        } else {
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        }
+    }
+
     private fun searchTracks() {
         makeViewsInvisible()
         updateTrackList()
@@ -213,6 +258,7 @@ class SearchActivity : AppCompatActivity() {
                     } else {
                         tracks.addAll(result)
                         trackAdapter.notifyDataSetChanged()
+                        progressBar.visibility = View.GONE
                     }
                 } else {
                     processResponseWithError()
@@ -239,6 +285,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderImage.visibility = View.INVISIBLE
         placeholderText.visibility = View.INVISIBLE
         refreshButton.visibility = View.INVISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
     private fun updateTrackList() {
@@ -255,5 +302,14 @@ class SearchActivity : AppCompatActivity() {
     private fun hideKeyboard(inputEditText: EditText) {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 }
