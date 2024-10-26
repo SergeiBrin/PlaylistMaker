@@ -1,6 +1,7 @@
-package com.example.playlistmaker.deserializer
+package com.example.playlistmaker.data.deserializer
 
-import com.example.playlistmaker.model.Track
+import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -8,13 +9,13 @@ import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackDeserializer : JsonDeserializer<Track> {
+class TrackDeserializer : JsonDeserializer<TrackDto> {
 
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): Track {
+    ): TrackDto {
         val jsonObject = json.asJsonObject
 
         val trackId = jsonObject.get("trackId").asInt
@@ -30,7 +31,7 @@ class TrackDeserializer : JsonDeserializer<Track> {
 
         val modifiedTrackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTime)
 
-        return Track(
+        return TrackDto(
             trackId,
             trackName,
             artistName,

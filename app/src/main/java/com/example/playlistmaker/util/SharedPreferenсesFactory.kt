@@ -1,4 +1,4 @@
-package com.example.playlistmaker.sharedpref
+package com.example.playlistmaker.util
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

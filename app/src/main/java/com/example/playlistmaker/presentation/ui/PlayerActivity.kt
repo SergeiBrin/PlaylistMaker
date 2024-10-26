@@ -1,4 +1,4 @@
-package com.example.playlistmaker.activity
+package com.example.playlistmaker.presentation.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.model.Track
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.util.dpToPx
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
@@ -41,7 +41,10 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var genre: TextView
     private lateinit var country: TextView
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
     companion object {
+        private const val INTENT_NAME = "Track"
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
@@ -57,8 +60,8 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        // Подгружаем переданный через Intent трек
-        track = intent.getSerializableExtra("Track") as Track
+        // Подгружаем трек, переданный через Intent
+        track = intent.getSerializableExtra(INTENT_NAME) as Track
         preparePlayer()
 
         arrowBackButton = findViewById(R.id.arrow_back_player)
@@ -175,8 +178,7 @@ class PlayerActivity : AppCompatActivity() {
             override fun run() {
                 when (playerState) {
                     STATE_PLAYING -> {
-                        playbackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-                            .format(mediaPlayer.currentPosition)
+                        playbackTime.text = dateFormat.format(mediaPlayer.currentPosition)
                         handler.postDelayed(this, UPDATE_TIME_INTERVAL)
                     }
 

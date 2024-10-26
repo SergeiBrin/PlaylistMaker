@@ -1,4 +1,4 @@
-package com.example.playlistmaker.activity
+package com.example.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -7,10 +7,13 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.sharedpref.App
+import com.example.playlistmaker.domain.api.interactor.AppInteractor
+import com.example.playlistmaker.domain.impl.AppInteractorImpl
+import com.example.playlistmaker.settings.App
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var appInteractor: AppInteractor
     private lateinit var app: App
     private lateinit var themeSwitcher: SwitchMaterial
 
@@ -18,18 +21,19 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        appInteractor = AppInteractorImpl()
+
         val arrowBackButton = findViewById<ImageView>(R.id.arrow_back_settings_screen)
         arrowBackButton.setOnClickListener {
             finish()
         }
 
         themeSwitcher = findViewById(R.id.themeSwitcher)
-        app = applicationContext as App
         setSwitchState()
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            app.switchTheme(checked)
-            app.saveThemeSettings()
+            appInteractor.switchTheme(checked)
+            appInteractor.saveThemeSettings()
         }
 
         val actionShareAppButton = findViewById<FrameLayout>(R.id.btn_share_app)
@@ -74,7 +78,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setSwitchState() {
         themeSwitcher.post {
-            themeSwitcher.isChecked = app.isDarkTheme
+            themeSwitcher.isChecked = appInteractor.getTheme()
         }
     }
 }
