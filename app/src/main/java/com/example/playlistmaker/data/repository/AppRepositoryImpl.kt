@@ -1,15 +1,15 @@
-package com.example.playlistmaker.domain.impl
+package com.example.playlistmaker.data.repository
 
-import com.example.playlistmaker.domain.api.interactor.AppInteractor
+import com.example.playlistmaker.domain.api.repository.AppRepository
 import com.example.playlistmaker.settings.App
 
-class AppInteractorImpl : AppInteractor {
+class AppRepositoryImpl : AppRepository {
 
     companion object {
         val app = App.instance
     }
 
-    override fun getTheme(): Boolean {
+    override fun getIsThemeDark(): Boolean {
         return app.isDarkTheme
     }
 

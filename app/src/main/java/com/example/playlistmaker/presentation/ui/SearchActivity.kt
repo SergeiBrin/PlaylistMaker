@@ -23,11 +23,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.interactor.SearchHistoryInteractor
+import com.example.playlistmaker.domain.api.interactor.TracksInteractor
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.presentation.adapter.TracksAdapter
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.api.interactor.TracksInteractor
-import com.example.playlistmaker.data.history.SearchHistory
 
 class SearchActivity : AppCompatActivity() {
     private val tracksInteractror = Creator.provideTracksInteractor()
