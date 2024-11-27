@@ -8,7 +8,7 @@ fun getThemeSettings(context: Context): SharedPreferences {
     return context.getSharedPreferences("PlaylistMakerSettings", MODE_PRIVATE)
 }
 
-fun getSearchHistory(context: Context): SharedPreferences {
+fun getSearchHistorySharedPref(context: Context): SharedPreferences {
     return context.getSharedPreferences("SearchHistory", MODE_PRIVATE)
 }
 
