@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,20 +20,18 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapter.TracksAdapter
-import com.example.playlistmaker.search.ui.viewmodel.SearchHistoryViewModel
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
-    // ViewModels
-    private lateinit var searchViewModel: SearchViewModel
-    private lateinit var searchHistoryViewModel: SearchHistoryViewModel
+    // ViewModel
+    private val searchViewModel: SearchViewModel by viewModel()
 
     private lateinit var arrowBackButton: ImageView
 
@@ -66,12 +65,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        // Инициализация ViewModels
-        searchViewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
-        searchHistoryViewModel = ViewModelProvider(this, SearchHistoryViewModel.getViewModelFactory())[SearchHistoryViewModel::class.java]
-
         // Загружаем историю поиска через ViewModel
-        searchHistoryViewModel.downloadSearchHistory()
+        searchViewModel.downloadSearchHistory() // Здесь был viewHistory
 
         inputEditText = findViewById(R.id.editing_search_text)
         // Восстановление текста в поисковой строке
@@ -85,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
 
         trackAdapter = TracksAdapter(tracks) { track ->
             if (clickDebounce()) {
-                searchHistoryViewModel.saveTrackInHistoryTrackList(track)
+                searchViewModel.saveTrackInHistoryTrackList(track)
                 val playerIntent = Intent(this, PlayerActivity::class.java).apply {
                     putExtra("Track", track)
                 }
@@ -114,7 +109,6 @@ class SearchActivity : AppCompatActivity() {
 
         // Вывод списка треков на экран после его изменения в LiveData
         searchViewModel.getTracksLiveData().observe(this) { foundTracks ->
-            // clearTrackList()
             if (foundTracks == null) {
                 processResponseWithError()
                 return@observe
@@ -134,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // При изменении в LiveData обновляетя список для адаптера
-        searchHistoryViewModel.getHistoryTracksLiveData().observe(this) { tracks ->
+        searchViewModel.getHistoryTracksLiveData().observe(this) { tracks ->
             updateSearchHistoryTrackList(tracks)
         }
 
@@ -157,7 +151,7 @@ class SearchActivity : AppCompatActivity() {
 
         // Очистка истории поиска
         clearSearchHistoryButton.setOnClickListener {
-            searchHistoryViewModel.deleteSearchHistory()
+            searchViewModel.deleteSearchHistory()
             historyTrackContainer.isVisible = false
         }
 
@@ -233,7 +227,7 @@ class SearchActivity : AppCompatActivity() {
      */
     override fun onStop() {
         super.onStop()
-        searchHistoryViewModel.saveSearchHistoryInPreferences()
+        searchViewModel.saveSearchHistoryInPreferences()
     }
 
     private fun searchDebounce(s: CharSequence?) {

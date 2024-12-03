@@ -1,8 +1,8 @@
 package com.example.playlistmaker.search.domain.interactor.impl
 
+import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.search.domain.interactor.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.repository.SearchHistoryRepository
-import com.example.playlistmaker.core.model.Track
 
 class SearchHistoryInteractorImpl(
     private val repository: SearchHistoryRepository
@@ -10,6 +10,7 @@ class SearchHistoryInteractorImpl(
     override var historyTrackList: MutableList<Track> = mutableListOf()
 
     override fun downloadSearchHistory() {
+        historyTrackList.clear()
         historyTrackList.addAll(repository.downloadSearchHistory())
     }
 
