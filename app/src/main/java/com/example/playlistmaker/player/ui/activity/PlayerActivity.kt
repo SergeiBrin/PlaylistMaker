@@ -1,13 +1,13 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -15,9 +15,10 @@ import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.ui.viewmodel.PlayerViewModel
 import com.example.playlistmaker.util.dpToPx
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
-    private lateinit var playerViewModel: PlayerViewModel
+    private val playerViewModel: PlayerViewModel by viewModel()
 
     private lateinit var track: Track
     private lateinit var arrowBackButton: ImageButton
@@ -39,8 +40,6 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        playerViewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory())[PlayerViewModel::class.java]
-
         // Подгружаем трек, переданный через Intent
         track = intent.getSerializableExtra(INTENT_NAME) as Track
 
@@ -61,7 +60,7 @@ class PlayerActivity : AppCompatActivity() {
 
         playerViewModel.getPlayerStateLiveData().observe(this) { playerState ->
             when (playerState) {
-                PlayerState.StateDefault -> Toast.makeText(this, "Подготовка", Toast.LENGTH_SHORT).show()
+                PlayerState.StateDefault -> Log.i("PlayerState", "Default")
                 PlayerState.StatePrepared -> prepareViewForPlayback()
                 PlayerState.StatePlaying -> prepareViewForStartPlayer()
                 PlayerState.StatePaused -> prepareViewForPausePlayer()

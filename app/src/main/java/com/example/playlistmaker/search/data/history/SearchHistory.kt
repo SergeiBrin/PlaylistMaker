@@ -1,13 +1,14 @@
 package com.example.playlistmaker.search.data.history
-import android.content.Context
+import android.content.SharedPreferences
 import com.example.playlistmaker.search.data.dto.SearchHistoryTrackDto
-import com.example.playlistmaker.util.getSearchHistorySharedPref
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SearchHistory(val context: Context) {
-    val searchHistoryPref = getSearchHistorySharedPref(context)
-    val gson = Gson()
+
+class SearchHistory(
+    private val searchHistoryPref: SharedPreferences,
+    private val gson: Gson
+) {
 
     fun getSearchHistory(): List<SearchHistoryTrackDto> {
         val jsonTracks = getTracksFromHistory()

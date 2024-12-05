@@ -1,23 +1,12 @@
 package com.example.playlistmaker.search.data.network
 
 import com.example.playlistmaker.search.data.dto.Response
-import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.dto.TrackRequest
-import com.example.playlistmaker.search.data.deserializer.TrackDeserializer
-import com.example.playlistmaker.util.createRetrofit
-import com.google.gson.GsonBuilder
 import java.io.IOException
 
-class RetrofitNetworkClient : NetworkClient {
-    private val baseUrl = "https://itunes.apple.com"
-
-    private val retrofit = createRetrofit(
-        baseUrl,
-        GsonBuilder()
-            .registerTypeAdapter(TrackDto::class.java, TrackDeserializer())
-            .create())
-
-    private val itunesApiService = retrofit.create(ItunesApiService::class.java)
+class RetrofitNetworkClient(
+    private val itunesApiService: ItunesApiService
+) : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (dto is TrackRequest) {

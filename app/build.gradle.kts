@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation("io.insert-koin:koin-android:3.3.0")
+    implementation("io.insert-koin:koin-annotations:1.2.2")
     implementation("com.google.android.material:material:1.6.1")
     implementation("com.github.bumptech.glide:glide:4.14.2")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")

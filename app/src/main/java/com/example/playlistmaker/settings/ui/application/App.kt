@@ -4,23 +4,32 @@ import android.app.Application
 import android.app.UiModeManager
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.util.getThemeSettings
+import com.example.playlistmaker.di.app.appModule
+import com.example.playlistmaker.di.data.dataModule
+import com.example.playlistmaker.di.domain.interactorModule
+import com.example.playlistmaker.di.repository.repositoryModule
+import com.example.playlistmaker.di.viewmodel.viewModelModule
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.qualifier.named
 
 class App : Application() {
     var isDarkTheme = false
-    lateinit var settings: SharedPreferences
+    private val settings: SharedPreferences by inject(named("PlaylistMakerSettings"))
 
     companion object {
-        lateinit var instance: App
-            private set
         const val THEME_SETTINGS_KEY = "Theme"
     }
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
 
-        settings = getThemeSettings(this)
+        startKoin {
+            androidContext(this@App)
+            modules(appModule, dataModule, repositoryModule, interactorModule, viewModelModule)
+        }
+
         val theme = settings.getString(THEME_SETTINGS_KEY, null)
 
         if (theme != null) {

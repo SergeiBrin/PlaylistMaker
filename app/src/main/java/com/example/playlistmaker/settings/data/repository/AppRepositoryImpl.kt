@@ -3,7 +3,9 @@ package com.example.playlistmaker.settings.data.repository
 import com.example.playlistmaker.settings.domain.repository.AppRepository
 import com.example.playlistmaker.settings.ui.application.App
 
-class AppRepositoryImpl : AppRepository {
+class AppRepositoryImpl(
+    private val app: App
+) : AppRepository {
 
     override fun getIsThemeDark(): Boolean {
         return app.isDarkTheme
@@ -15,9 +17,5 @@ class AppRepositoryImpl : AppRepository {
 
     override fun saveThemeSettings() {
         app.saveThemeSettings()
-    }
-
-    companion object {
-        val app = App.instance
     }
 }
