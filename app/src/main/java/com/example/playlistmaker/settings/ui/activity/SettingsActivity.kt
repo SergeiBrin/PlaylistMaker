@@ -1,5 +1,7 @@
 package com.example.playlistmaker.settings.ui.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -19,17 +21,8 @@ class SettingsActivity : AppCompatActivity() {
 
         themeSwitcher = findViewById(R.id.themeSwitcher)
 
-        settingsViewModel.getThemeSwitcherLiveData().observe(this) { event ->
-            event.getDataValue()?.let {
-                themeSwitcher.isChecked = it
-            }
-
-        }
-
-        settingsViewModel.getSharingLiveData().observe(this) { event ->
-            event.getDataValue()?.let {
-                startActivity(it)
-            }
+        settingsViewModel.getThemeSwitcherLiveData().observe(this) { checked ->
+            themeSwitcher.isChecked = checked
         }
 
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
@@ -44,21 +37,37 @@ class SettingsActivity : AppCompatActivity() {
 
         val actionShareAppButton = findViewById<FrameLayout>(R.id.btn_share_app)
         actionShareAppButton.setOnClickListener {
-            settingsViewModel.createShareAppIntent(getString(R.string.uri_android_developer))
+            val shareAppIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_android_developer))
+            }
+
+            startActivity(shareAppIntent)
         }
 
         val buttonSupportContact = findViewById<FrameLayout>(R.id.btn_support_contact)
         buttonSupportContact.setOnClickListener {
-            settingsViewModel.createSupportContactIntent(
-                getString(R.string.my_email),
-                getString(R.string.letter_subject),
-                getString(R.string.letter_text)
-            )
+            val supportContactIntent = Intent().apply {
+                action = Intent.ACTION_SENDTO
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_subject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
+            }
+
+            startActivity(supportContactIntent)
         }
 
         val buttonUserAgreement = findViewById<FrameLayout>(R.id.btn_user_agreement)
         buttonUserAgreement.setOnClickListener {
-             settingsViewModel.createUserAgreementIntent(getString(R.string.uri_practicum_offer))
+            val uri = Uri.parse(getString(R.string.uri_practicum_offer))
+            val userAgreementIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = uri
+            }
+
+            startActivity(userAgreementIntent)
         }
     }
 }

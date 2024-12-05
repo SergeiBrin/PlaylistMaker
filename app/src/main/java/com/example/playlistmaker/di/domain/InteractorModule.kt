@@ -6,8 +6,6 @@ import com.example.playlistmaker.search.domain.interactor.impl.SearchHistoryInte
 import com.example.playlistmaker.search.domain.interactor.impl.TracksInteractorImpl
 import com.example.playlistmaker.settings.domain.interactor.api.ThemeInteractor
 import com.example.playlistmaker.settings.domain.interactor.impl.ThemeInteractorImpl
-import com.example.playlistmaker.sharing.domain.api.SharingInteractor
-import com.example.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 import org.koin.dsl.module
 
 val interactorModule = module {
@@ -22,10 +20,6 @@ val interactorModule = module {
 
     single<ThemeInteractor> {
         ThemeInteractorImpl(get())
-    }
-
-    single<SharingInteractor> {
-        SharingInteractorImpl()
     }
 
 }

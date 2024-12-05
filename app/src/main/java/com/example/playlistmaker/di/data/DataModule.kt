@@ -14,10 +14,14 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+const val URL = "https://itunes.apple.com"
+const val SETTINGS_KEY = "PlaylistMakerSettings"
+const val SEARCH_HISTORY_KEY = "SearchHistory"
+
 val dataModule = module {
     single<ItunesApiService> {
         createRetrofit(
-            "https://itunes.apple.com",
+            URL,
             GsonBuilder()
                 .registerTypeAdapter(TrackDto::class.java, TrackDeserializer())
                 .create()
@@ -25,14 +29,14 @@ val dataModule = module {
             .create(ItunesApiService::class.java)
     }
 
-    single(named("PlaylistMakerSettings")) {
+    single(named(SETTINGS_KEY)) {
         androidContext()
-            .getSharedPreferences("PlaylistMakerSettings", MODE_PRIVATE)
+            .getSharedPreferences(SETTINGS_KEY, MODE_PRIVATE)
     }
 
-    single(named("SearchHistory")) {
+    single(named(SEARCH_HISTORY_KEY)) {
         androidContext()
-            .getSharedPreferences("SearchHistory", MODE_PRIVATE)
+            .getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
     }
 
     factory {
