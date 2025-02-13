@@ -1,19 +1,18 @@
 package com.example.playlistmaker.settings.ui.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.settings.ui.viewmodel.ThemeViewModel
-import com.example.playlistmaker.sharing.getShareAppIntent
-import com.example.playlistmaker.sharing.getSupportContactIntent
-import com.example.playlistmaker.sharing.getUserAgreementIntent
+import com.example.playlistmaker.settings.ui.viewmodel.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var themeViewModel: ThemeViewModel
+    private val settingsViewModel: SettingsViewModel by viewModel()
     private lateinit var themeSwitcher: SwitchMaterial
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,15 +21,13 @@ class SettingsActivity : AppCompatActivity() {
 
         themeSwitcher = findViewById(R.id.themeSwitcher)
 
-        themeViewModel = ViewModelProvider(this, ThemeViewModel.getViewModelFactory())[ThemeViewModel::class.java]
-
-        themeViewModel.getThemeSwitcherLiveData().observe(this) { isChecked ->
-            themeSwitcher.isChecked = isChecked
+        settingsViewModel.getThemeSwitcherLiveData().observe(this) { checked ->
+            themeSwitcher.isChecked = checked
         }
 
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            themeViewModel.switchTheme(checked)
-            themeViewModel.saveThemeSettings()
+            settingsViewModel.switchTheme(checked)
+            settingsViewModel.saveThemeSettings()
         }
 
         val arrowBackButton = findViewById<ImageView>(R.id.arrow_back_settings_screen)
@@ -40,24 +37,37 @@ class SettingsActivity : AppCompatActivity() {
 
         val actionShareAppButton = findViewById<FrameLayout>(R.id.btn_share_app)
         actionShareAppButton.setOnClickListener {
-            val intent = getShareAppIntent(getString(R.string.uri_android_developer))
-            startActivity(intent)
+            val shareAppIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_android_developer))
+            }
+
+            startActivity(shareAppIntent)
         }
 
         val buttonSupportContact = findViewById<FrameLayout>(R.id.btn_support_contact)
         buttonSupportContact.setOnClickListener {
-            val intent = getSupportContactIntent(
-                getString(R.string.my_email),
-                getString(R.string.letter_subject),
-                getString(R.string.letter_text)
-            )
-            startActivity(intent)
+            val supportContactIntent = Intent().apply {
+                action = Intent.ACTION_SENDTO
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_subject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
+            }
+
+            startActivity(supportContactIntent)
         }
 
         val buttonUserAgreement = findViewById<FrameLayout>(R.id.btn_user_agreement)
         buttonUserAgreement.setOnClickListener {
-            val intent = getUserAgreementIntent(getString(R.string.uri_practicum_offer))
-            startActivity(intent)
+            val uri = Uri.parse(getString(R.string.uri_practicum_offer))
+            val userAgreementIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = uri
+            }
+
+            startActivity(userAgreementIntent)
         }
     }
 }

@@ -1,19 +1,13 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
-import android.app.Application
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.settings.ui.application.App
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -21,7 +15,7 @@ import java.time.format.DateTimeParseException
 import java.util.Locale
 import java.util.concurrent.Executors
 
-class PlayerViewModel(application: Application) : AndroidViewModel(application) {
+class PlayerViewModel : ViewModel() {
     private var mediaPlayer = MediaPlayer()
     private val handler = Handler(Looper.getMainLooper())
     private val executor = Executors.newCachedThreadPool()
@@ -48,7 +42,6 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
         }
 
         mediaPlayer.setOnPreparedListener {
-            // playButton.isEnabled = true
             playerStateLiveData.postValue(PlayerState.StatePrepared)
         }
 
@@ -113,11 +106,5 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
 
     companion object {
         private const val UPDATE_TIME_INTERVAL = 200L
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(this[APPLICATION_KEY] as App)
-            }
-        }
     }
 }
