@@ -36,25 +36,10 @@
             android:fontFamily="@font/ys_display_regular"
             android:text="@string/switcher_dark_theme"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/text_regular_16sp"
+            android:textSize="@dimen/text_size_16sp"
             app:switchMinWidth="56dp"
             app:thumbTint="?attr/colorSwitchThumb"
             app:trackTint="?attr/colorSwitchTrack" />
-
-
-<!--        <TextView-->
-<!--            style="@style/RegularTextOnSettingsScreen"-->
-<!--            android:text="@string/switcher_dark_theme" />-->
-
-<!--        <Switch-->
-<!--            style="@style/IconsOnTheSettingsScreen"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:switchMinWidth="56dp"-->
-<!--            android:thumbTint="@color/light_gray"-->
-<!--            android:trackTint="@color/light_gray"-->
-<!--            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
-
-
 
     </FrameLayout>
 

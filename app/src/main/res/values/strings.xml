@@ -16,6 +16,9 @@
     <string name="no_tracks_found">Ничего не нашлось</string>
     <string name="problems_when_searching_for_a_tracks">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_history">Вы искали</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="not_found_playlist">Вы не создали\n ни одного плейлиста</string>
+    <string name="the_media_is_empty">Ваша медиатека пуста</string>
     <string name="clear_search_history">Очистить историю</string>
     <string name="update_search_activity">Обновить</string>
     <string name="duration">Длительность</string>
