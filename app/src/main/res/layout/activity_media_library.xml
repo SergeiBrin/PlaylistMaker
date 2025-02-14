@@ -1,22 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/themeBackground">
+    android:orientation="vertical"
+    android:background="?attr/colorOnSecondary">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/margin_16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:text="Пожалуйста, подождите.\nМы тут что-то крутим! 🛠️"
-        android:textColor="?attr/colorSecondary"
-        android:textSize="26sp" />
+    <FrameLayout
+        style="@style/HeaderFrameLayout">
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/arrow_back_home_screen"
+            style="@style/ArrowBackHeaderIcon"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            style="@style/HeaderText"
+            android:layout_marginStart="@dimen/margin_64dp"
+            android:text="@string/media_library" />
+
+    </FrameLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_size_48dp"
+        android:layout_marginLeft="@dimen/margin_16dp"
+        android:layout_marginRight="@dimen/margin_16dp"
+        android:background="?attr/colorOnSecondary"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="?attr/colorSecondary"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabTextAppearance="@style/TabLayout"
+        app:tabTextColor="?attr/colorSecondary" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
 
 
 
