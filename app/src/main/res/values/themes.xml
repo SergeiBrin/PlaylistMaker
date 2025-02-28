@@ -21,7 +21,7 @@
         <item name="colorSwitchThumb">@color/light_gray</item>
         <item name="colorSwitchTrack">@color/very_light_gray</item>
 
-        <item name="iconsOnTheSettingsScreen">@color/very_light_gray</item>
+        <item name="iconsOnTheSettingsScreen">@color/light_gray</item>
 
         <!-- Background and icon color. -->
         <item name="themeBackground">@color/white</item>
