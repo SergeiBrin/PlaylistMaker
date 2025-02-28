@@ -28,11 +28,7 @@
         <item name="themeBackground">@color/navy_blue</item>
         <item name="android:textColorHint">@color/navy_blue</item>
 
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/navy_blue</item>
         <!-- Customize your theme here. -->
     </style>
-
-    <style name="Theme.MainScreen" parent="Theme.PlaylistMaker"/>
 
 </resources>

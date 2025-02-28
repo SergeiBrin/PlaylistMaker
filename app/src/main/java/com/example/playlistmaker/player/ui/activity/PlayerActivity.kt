@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -41,7 +40,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_player)
 
         // Подгружаем трек, переданный через Intent
-        track = intent.getSerializableExtra(INTENT_NAME) as Track
+        track = intent.getSerializableExtra(INTENT_TRACK_KEY) as Track
 
         arrowBackButton = findViewById(R.id.arrow_back_player)
         albumImage = findViewById(R.id.album_image)
@@ -133,7 +132,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val INTENT_NAME = "Track"
+        private const val INTENT_TRACK_KEY = "TRACK"
         private const val START_TIME = "00:00"
     }
 }

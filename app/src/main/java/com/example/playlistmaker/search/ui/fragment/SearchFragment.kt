@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.ui.activity
+package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -7,7 +7,9 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -17,22 +19,24 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Track
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapter.TracksAdapter
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+    private lateinit var binding: FragmentSearchBinding
+
     // ViewModel
     private val searchViewModel: SearchViewModel by viewModel()
-
-    private lateinit var arrowBackButton: ImageView
 
     private lateinit var inputEditText: EditText
     private var inputText: String? = ""
@@ -60,54 +64,64 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Загружаем историю поиска через ViewModel
         searchViewModel.downloadSearchHistory() // Здесь был viewHistory
 
-        inputEditText = findViewById(R.id.editing_search_text)
+        inputEditText = binding.editingSearchText
+
         // Восстановление текста в поисковой строке
         if (savedInstanceState != null) {
+            inputText = savedInstanceState.getString(SEARCH_TEXT_KEY)
             inputEditText.setText(inputText)
         }
 
-        arrowBackButton = findViewById(R.id.arrow_back_search_screen)
-        clearButton = findViewById(R.id.clean_button)
-        progressBar = findViewById(R.id.progress_bar)
+        clearButton = binding.cleanButton
+        progressBar = binding.progressBar
 
         trackAdapter = TracksAdapter(tracks) { track ->
             if (clickDebounce()) {
                 searchViewModel.saveTrackInHistoryTrackList(track)
-                val playerIntent = Intent(this, PlayerActivity::class.java).apply {
-                    putExtra("Track", track)
+                val bundle = Bundle().apply {
+                    putSerializable(INTENT_TRACK_KEY, track)
                 }
-                startActivity(playerIntent)
+
+                findNavController().navigate(R.id.action_searchFragment_to_playerActivity, bundle)
             }
         }
 
-        searchTrackRecyclerView = findViewById(R.id.recycle_view_tracks_search)
-        placeholderImage = findViewById(R.id.search_placeholder_image)
-        placeholderText = findViewById(R.id.search_placeholder_text)
-        refreshButton = findViewById(R.id.search_refresh_button)
+        searchTrackRecyclerView = binding.recycleViewTracksSearch
+        placeholderImage = binding.searchPlaceholderImage
+        placeholderText = binding.searchPlaceholderText
+        refreshButton = binding.searchRefreshButton
 
         trackSearchHistoryAdapter = TrackSearchHistoryAdapter(historyTracks) { track ->
-            val playerIntent = Intent(this, PlayerActivity::class.java).apply {
-                putExtra("Track", track)
+            val playerIntent = Intent(requireContext(), PlayerActivity::class.java).apply {
+                putExtra(INTENT_TRACK_KEY, track)
             }
-            startActivity(playerIntent)
+            requireContext().startActivity(playerIntent)
         }
 
-        historyRecycleView = findViewById(R.id.recycle_view_tracks_search_history)
-        historyTrackContainer = findViewById(R.id.history_track_container)
-        clearSearchHistoryButton = findViewById(R.id.clear_search_history_button)
+        historyRecycleView = binding.recycleViewTracksSearchHistory
+        historyTrackContainer = binding.historyTrackContainer
+        clearSearchHistoryButton = binding.clearSearchHistoryButton
 
         searchTrackRecyclerView.adapter = trackAdapter
         historyRecycleView.adapter = trackSearchHistoryAdapter
 
         // Вывод списка треков на экран после его изменения в LiveData
-        searchViewModel.getTracksLiveData().observe(this) { foundTracks ->
+        searchViewModel.getTracksLiveData().observe(viewLifecycleOwner) { foundTracks ->
             if (foundTracks == null) {
                 processResponseWithError()
                 return@observe
@@ -127,13 +141,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // При изменении в LiveData обновляетя список для адаптера
-        searchViewModel.getHistoryTracksLiveData().observe(this) { tracks ->
+        searchViewModel.getHistoryTracksLiveData().observe(viewLifecycleOwner) { tracks ->
             updateSearchHistoryTrackList(tracks)
-        }
-
-        // Возврат к предыдущему активити
-        arrowBackButton.setOnClickListener {
-            finish()
         }
 
         // Удаление текста в поисковом запросе
@@ -216,16 +225,8 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        inputText = savedInstanceState.getString(SEARCH_TEXT_KEY)
-    }
-
-    /**
-     * При завершении работы активити список треков истории сохраняется в shared preferences
-     */
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
         searchViewModel.saveSearchHistoryInPreferences()
     }
 
@@ -279,7 +280,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard(inputEditText: EditText) {
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
     }
 
@@ -295,8 +296,8 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_TEXT_KEY = "SEARCH_TEXT"
+        private const val INTENT_TRACK_KEY = "TRACK"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
-
 }
