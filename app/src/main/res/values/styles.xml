@@ -101,5 +101,15 @@
         <item name="android:textColor">?attr/colorSecondary</item>
         <item name="android:gravity">center</item>
     </style>
+    
+    <style name="BottomNavigationActive">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_12sp</item>
+    </style>
+
+    <style name="BottomNavigationInactive">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_12sp</item>
+    </style>
 
 </resources>

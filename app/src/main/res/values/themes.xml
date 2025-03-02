@@ -30,13 +30,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.MainScreen" parent="Theme.PlaylistMaker">
-        <item name="themeBackground">@color/bright_blue</item>
-        <item name="android:statusBarColor">@color/bright_blue</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:tint">@color/light_gray</item>
-    </style>
 </resources>

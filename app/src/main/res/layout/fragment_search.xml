@@ -11,14 +11,9 @@
     <FrameLayout
         style="@style/HeaderFrameLayout">
 
-        <ImageButton
-            android:id="@+id/arrow_back_search_screen"
-            style="@style/ArrowBackHeaderIcon"
-            android:src="@drawable/arrow_back" />
-
         <TextView
             style="@style/HeaderText"
-            android:layout_marginStart="@dimen/margin_64dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:text="@string/search" />
 
     </FrameLayout>
@@ -55,7 +50,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_16dp"
             android:backgroundTint="?attr/colorSearchForm"
-            android:src="@drawable/button1_lm"
+            android:src="@drawable/search_icon"
             app:tint="?attr/colorDataInSearchForm" />
 
         <FrameLayout

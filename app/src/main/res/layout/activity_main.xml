@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?attr/themeBackground"
-    android:padding="@dimen/margin_16dp">
+    tools:context=".main.ui.activity.MainActivity">
 
-    <TextView
-        android:id="@+id/app_name"
-        style="@style/HeaderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/app_name"
-        android:textColor="@color/white" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation_graph" />
 
-    <Button
-        android:id="@+id/search_button"
-        style="@style/HomeScreenButtonStyle"
-        android:layout_marginBottom="8dp"
-        android:text="@string/search"
-        app:icon="@drawable/button1_lm" />
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/very_light_gray"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
 
-    <Button
-        android:id="@+id/media_library_button"
-        style="@style/HomeScreenButtonStyle"
-        android:layout_marginBottom="8dp"
-        android:text="@string/media_library"
-        app:icon="@drawable/button2_lm" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:backgroundTint="?attr/colorOnSecondary"
+        app:itemIconSize="24dp"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextAppearanceActive="@style/BottomNavigationActive"
+        app:itemTextAppearanceActiveBoldEnabled="false"
+        app:itemTextAppearanceInactive="@style/BottomNavigationInactive"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line"
+        app:menu="@menu/navigation_items" />
 
-    <Button
-        android:id="@+id/settings_button"
-        style="@style/HomeScreenButtonStyle"
-        android:text="@string/settings"
-        android:textAllCaps="false"
-        app:icon="@drawable/button3_lm" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
