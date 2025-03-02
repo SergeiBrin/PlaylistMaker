@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapter.TracksAdapter
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
@@ -107,10 +105,11 @@ class SearchFragment : Fragment() {
         refreshButton = binding.searchRefreshButton
 
         trackSearchHistoryAdapter = TrackSearchHistoryAdapter(historyTracks) { track ->
-            val playerIntent = Intent(requireContext(), PlayerActivity::class.java).apply {
-                putExtra(INTENT_TRACK_KEY, track)
+            val bundle = Bundle().apply {
+                putSerializable(INTENT_TRACK_KEY, track)
             }
-            requireContext().startActivity(playerIntent)
+
+            findNavController().navigate(R.id.action_searchFragment_to_playerActivity, bundle)
         }
 
         historyRecycleView = binding.recycleViewTracksSearchHistory
@@ -123,11 +122,13 @@ class SearchFragment : Fragment() {
         // Вывод списка треков на экран после его изменения в LiveData
         searchViewModel.getTracksLiveData().observe(viewLifecycleOwner) { foundTracks ->
             if (foundTracks == null) {
+                searchTrackRecyclerView.visibility = View.INVISIBLE
                 processResponseWithError()
                 return@observe
             }
 
             if (foundTracks.isEmpty()) {
+                searchTrackRecyclerView.visibility = View.INVISIBLE
                 historyTrackContainer.isVisible = false
                 placeholderImage.visibility = View.VISIBLE
                 placeholderText.visibility = View.VISIBLE
@@ -135,6 +136,7 @@ class SearchFragment : Fragment() {
                 placeholderImage.setImageResource(R.drawable.search_not_found)
                 placeholderText.text = getString(R.string.no_tracks_found)
             } else {
+                searchTrackRecyclerView.visibility = View.VISIBLE
                 updateTrackList(foundTracks)
                 progressBar.visibility = View.GONE
             }
@@ -169,8 +171,10 @@ class SearchFragment : Fragment() {
             if (isHistoryVisible) {
                 if (historyTracks.isNotEmpty()) {
                     historyTrackContainer.isVisible = true
+                    searchTrackRecyclerView.isVisible = false
                 } else {
                     historyTrackContainer.isVisible = false
+                    searchTrackRecyclerView.isVisible = true
                 }
             }
         }
@@ -196,6 +200,7 @@ class SearchFragment : Fragment() {
                     searchTrackRecyclerView.isVisible = false
                     historyTrackContainer.isVisible = true
                 } else {
+                    makeViewsInvisible()
                     historyTrackContainer.isVisible = false
                     searchTrackRecyclerView.isVisible = true
                 }
@@ -243,6 +248,7 @@ class SearchFragment : Fragment() {
     private fun searchTracks() {
         makeViewsInvisible()
         searchViewModel.searchTracks(inputText!!)
+        progressBar.isVisible = true
     }
 
     private fun processResponseWithError() {
@@ -259,7 +265,7 @@ class SearchFragment : Fragment() {
         placeholderImage.visibility = View.INVISIBLE
         placeholderText.visibility = View.INVISIBLE
         refreshButton.visibility = View.INVISIBLE
-        progressBar.visibility = View.VISIBLE
+        progressBar.visibility = View.INVISIBLE
     }
 
     private fun clearTrackList() {
