@@ -82,6 +82,6 @@ class PlayerViewModel : ViewModel() {
     }
 
     companion object {
-        private const val UPDATE_TIME_INTERVAL = 200L
+        private const val UPDATE_TIME_INTERVAL = 300L
     }
 }
