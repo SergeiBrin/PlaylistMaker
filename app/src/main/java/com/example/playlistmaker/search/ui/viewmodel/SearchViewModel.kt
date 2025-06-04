@@ -3,9 +3,11 @@ package com.example.playlistmaker.search.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.search.domain.interactor.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.interactor.api.TracksInteractor
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -19,11 +21,11 @@ class SearchViewModel(
     fun getHistoryTracksLiveData(): LiveData<List<Track>> = historyTracksLiveData
 
     fun searchTracks(inputText: String) {
-        tracksInteractor.searchTracks(inputText, object : TracksInteractor.TracksConsumer {
-            override fun consume(foundTracks: List<Track>?) {
-                tracksLiveData.postValue(foundTracks)
+        viewModelScope.launch {
+            tracksInteractor.searchTracks(inputText).collect { result ->
+                tracksLiveData.postValue(result)
             }
-        })
+        }
     }
 
     fun downloadSearchHistory() {

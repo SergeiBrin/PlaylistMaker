@@ -2,8 +2,6 @@ package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -20,6 +18,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -28,6 +27,7 @@ import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.ui.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapter.TracksAdapter
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -57,10 +57,11 @@ class SearchFragment : Fragment() {
 
     // For auto search in 2 seconds
     private lateinit var progressBar: ProgressBar
-    private val searchRunnable = Runnable { searchTracks() }
-    private val handler = Handler(Looper.getMainLooper())
 
-    private var isClickAllowed = true
+    // Debounce
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private lateinit var onHistoryTrackClickDebounce: (Track) -> Unit
+    private lateinit var onSearchClickDebounce: (CharSequence?) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +76,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Загружаем историю поиска через ViewModel
-        searchViewModel.downloadSearchHistory() // Здесь был viewHistory
+        searchViewModel.downloadSearchHistory()
 
         inputEditText = binding.editingSearchText
 
@@ -88,15 +89,25 @@ class SearchFragment : Fragment() {
         clearButton = binding.cleanButton
         progressBar = binding.progressBar
 
-        trackAdapter = TracksAdapter(tracks) { track ->
-            if (clickDebounce()) {
-                searchViewModel.saveTrackInHistoryTrackList(track)
-                val bundle = Bundle().apply {
-                    putSerializable(INTENT_TRACK_KEY, track)
-                }
+        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+            saveTrackInHistory(track)
+            goToPlayerActivity(track)
+        }
 
-                findNavController().navigate(R.id.action_searchFragment_to_playerActivity, bundle)
+        onHistoryTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+            goToPlayerActivity(track)
+        }
+
+        onSearchClickDebounce = debounce(SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true) { s ->
+            if (s.isNullOrEmpty()) {
+                progressBar.isVisible = false
+            } else {
+                searchTracks()
             }
+        }
+
+        trackAdapter = TracksAdapter(tracks) { track ->
+            onTrackClickDebounce(track)
         }
 
         searchTrackRecyclerView = binding.recycleViewTracksSearch
@@ -105,11 +116,7 @@ class SearchFragment : Fragment() {
         refreshButton = binding.searchRefreshButton
 
         trackSearchHistoryAdapter = TrackSearchHistoryAdapter(historyTracks) { track ->
-            val bundle = Bundle().apply {
-                putSerializable(INTENT_TRACK_KEY, track)
-            }
-
-            findNavController().navigate(R.id.action_searchFragment_to_playerActivity, bundle)
+            onHistoryTrackClickDebounce(track)
         }
 
         historyRecycleView = binding.recycleViewTracksSearchHistory
@@ -205,7 +212,7 @@ class SearchFragment : Fragment() {
                     searchTrackRecyclerView.isVisible = true
                 }
 
-                searchDebounce(s)
+                onSearchClickDebounce(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -230,19 +237,9 @@ class SearchFragment : Fragment() {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onStop() {
+        super.onStop()
         searchViewModel.saveSearchHistoryInPreferences()
-    }
-
-    private fun searchDebounce(s: CharSequence?) {
-        handler.removeCallbacks(searchRunnable)
-
-        if (s.isNullOrEmpty()) {
-            progressBar.isVisible = false
-        } else {
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-        }
     }
 
     private fun searchTracks() {
@@ -290,14 +287,16 @@ class SearchFragment : Fragment() {
         inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+    private fun saveTrackInHistory(track: Track) {
+        searchViewModel.saveTrackInHistoryTrackList(track)
+    }
+
+    private fun goToPlayerActivity(track: Track) {
+        val bundle = Bundle().apply {
+            putSerializable(INTENT_TRACK_KEY, track)
         }
 
-        return current
+        findNavController().navigate(R.id.action_searchFragment_to_playerActivity, bundle)
     }
 
     companion object {

@@ -7,7 +7,7 @@ import com.example.playlistmaker.search.data.history.SearchHistory
 import com.example.playlistmaker.search.data.network.ItunesApiService
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.util.createRetrofit
+import com.example.playlistmaker.utils.createRetrofit
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.android.ext.koin.androidContext

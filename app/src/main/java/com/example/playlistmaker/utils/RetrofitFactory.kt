@@ -1,4 +1,4 @@
-package com.example.playlistmaker.util
+package com.example.playlistmaker.utils
 
 import com.google.gson.Gson
 import retrofit2.Retrofit

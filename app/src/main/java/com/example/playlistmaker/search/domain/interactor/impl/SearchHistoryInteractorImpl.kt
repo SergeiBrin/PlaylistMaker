@@ -24,7 +24,7 @@ class SearchHistoryInteractorImpl(
     }
 
     override fun deleteSearchHistory() {
-        repository.saveSearchHistory(historyTrackList)
+        repository.deleteSearchHistory()
         historyTrackList.clear()
     }
 

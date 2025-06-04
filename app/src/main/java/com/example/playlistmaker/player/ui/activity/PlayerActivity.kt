@@ -13,7 +13,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.ui.viewmodel.PlayerViewModel
-import com.example.playlistmaker.util.dpToPx
+import com.example.playlistmaker.utils.extractYear
+import com.example.playlistmaker.utils.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
@@ -98,7 +99,7 @@ class PlayerActivity : AppCompatActivity() {
         playbackTime.text = START_TIME
         duration.text = track.trackTime
         albumName.text = track.collectionName
-        albumYear.text = playerViewModel.extractYear(track.releaseDate)
+        albumYear.text = extractYear(track.releaseDate)
         genre.text = track.primaryGenreName
         country.text = track.country
 
