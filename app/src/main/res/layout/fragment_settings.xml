@@ -11,14 +11,9 @@
         style="@style/HeaderFrameLayout"
         android:layout_marginBottom="24dp">
 
-        <ImageButton
-            android:id="@+id/arrow_back_settings_screen"
-            style="@style/ArrowBackHeaderIcon"
-            android:src="@drawable/arrow_back" />
-
         <TextView
             style="@style/HeaderText"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:text="@string/settings" />
 
     </FrameLayout>
@@ -83,7 +78,5 @@
             android:src="@drawable/arrow_forward_lm" />
 
     </FrameLayout>
-
-
 
 </LinearLayout>

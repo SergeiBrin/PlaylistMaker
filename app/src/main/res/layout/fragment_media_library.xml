@@ -9,14 +9,9 @@
     <FrameLayout
         style="@style/HeaderFrameLayout">
 
-        <ImageButton
-            android:id="@+id/arrow_back_home_screen"
-            style="@style/ArrowBackHeaderIcon"
-            android:src="@drawable/arrow_back" />
-
         <TextView
             style="@style/HeaderText"
-            android:layout_marginStart="@dimen/margin_64dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:text="@string/media_library" />
 
     </FrameLayout>
