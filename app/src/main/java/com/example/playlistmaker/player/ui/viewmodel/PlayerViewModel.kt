@@ -1,29 +1,30 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.PlayerState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.util.Locale
-import java.util.concurrent.Executors
 
 class PlayerViewModel : ViewModel() {
     private var mediaPlayer = MediaPlayer()
-    private val handler = Handler(Looper.getMainLooper())
-    private val executor = Executors.newCachedThreadPool()
+    private var timerJob: Job? = null
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.StateDefault)
+    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
+
     private val currentTrackTimeLiveData = MutableLiveData<String>()
+    fun getCurrentTrackTimeLiveData(): LiveData<String> = currentTrackTimeLiveData
 
     override fun onCleared() {
         playerStateLiveData.postValue(PlayerState.StateDefault)
@@ -31,12 +32,8 @@ class PlayerViewModel : ViewModel() {
         super.onCleared()
     }
 
-    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
-
-    fun getCurrentTrackTimeLiveData(): LiveData<String> = currentTrackTimeLiveData
-
     fun preparePlayer(url: String) {
-        executor.execute {
+        viewModelScope.launch(Dispatchers.IO) {
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync()
         }
@@ -46,6 +43,7 @@ class PlayerViewModel : ViewModel() {
         }
 
         mediaPlayer.setOnCompletionListener {
+            timerJob?.cancel()
             playerStateLiveData.postValue(PlayerState.StatePrepared)
         }
     }
@@ -68,43 +66,22 @@ class PlayerViewModel : ViewModel() {
     }
 
     fun pausePlayer() {
-        playerStateLiveData.postValue(PlayerState.StatePaused)
         mediaPlayer.pause()
+        timerJob?.cancel()
+        playerStateLiveData.postValue(PlayerState.StatePaused)
     }
 
     private fun updatePlaybackTime() {
-        handler.post(object : Runnable {
-            override fun run() {
-                val playerState = playerStateLiveData.value
-                when (playerState) {
-                    PlayerState.StatePlaying -> {
-                        val s = dateFormat.format(mediaPlayer.currentPosition)
-                        currentTrackTimeLiveData.postValue(dateFormat.format(mediaPlayer.currentPosition))
-                        Log.i("TIME", s)
-                        handler.postDelayed(this, UPDATE_TIME_INTERVAL)
-                    }
-
-                    else -> handler.removeCallbacks(this)
-                }
+        timerJob = viewModelScope.launch {
+            while (mediaPlayer.isPlaying) {
+                delay(UPDATE_TIME_INTERVAL)
+                val trackPosition = dateFormat.format(mediaPlayer.currentPosition)
+                currentTrackTimeLiveData.postValue(trackPosition)
             }
-        })
-    }
-
-
-    fun extractYear(releaseDate: String): String {
-        var year = ""
-
-        try {
-            val zonedDateTime = ZonedDateTime.parse(releaseDate, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-            year = zonedDateTime.year.toString()
-        } catch (e: DateTimeParseException) {
-            Log.i("Info","Не удалось преобразовать строку releaseDate в ZonedDateTime")
         }
-
-        return year
     }
 
     companion object {
-        private const val UPDATE_TIME_INTERVAL = 200L
+        private const val UPDATE_TIME_INTERVAL = 300L
     }
 }
