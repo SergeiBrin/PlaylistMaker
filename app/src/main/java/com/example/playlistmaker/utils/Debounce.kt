@@ -1,6 +1,5 @@
 package com.example.playlistmaker.utils
 
-import com.example.playlistmaker.core.model.Track
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
