@@ -28,6 +28,7 @@ import com.example.playlistmaker.search.ui.adapter.TrackSearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapter.TracksAdapter
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
 import com.example.playlistmaker.utils.debounce
+import com.example.playlistmaker.utils.throttle
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -89,12 +90,12 @@ class SearchFragment : Fragment() {
         clearButton = binding.cleanButton
         progressBar = binding.progressBar
 
-        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+        onTrackClickDebounce = throttle(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
             saveTrackInHistory(track)
             goToPlayerActivity(track)
         }
 
-        onHistoryTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+        onHistoryTrackClickDebounce = throttle(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
             goToPlayerActivity(track)
         }
 
@@ -240,6 +241,14 @@ class SearchFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         searchViewModel.saveSearchHistoryInPreferences()
+    }
+
+    // наверное лучше потом убрать
+    override fun onResume() {
+        super.onResume()
+
+        if (!inputText.isNullOrEmpty()) searchTracks()
+        searchViewModel.downloadSearchHistory()
     }
 
     private fun searchTracks() {

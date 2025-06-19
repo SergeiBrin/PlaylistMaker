@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.core.model.Track
+import com.example.playlistmaker.db.domain.interactor.FavoriteTracksInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,7 +16,9 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel : ViewModel() {
+class PlayerViewModel(
+    private val favoriteTracksInteractor: FavoriteTracksInteractor
+) : ViewModel() {
     private var mediaPlayer = MediaPlayer()
     private var timerJob: Job? = null
 
@@ -25,6 +29,12 @@ class PlayerViewModel : ViewModel() {
 
     private val currentTrackTimeLiveData = MutableLiveData<String>()
     fun getCurrentTrackTimeLiveData(): LiveData<String> = currentTrackTimeLiveData
+
+    private val favoriteTrack = MutableLiveData<Track>()
+    fun getFavoriteTrack(): LiveData<Track> = favoriteTrack
+
+    private val isFavoriteTrack = MutableLiveData<Track?>()
+    fun getIsFavoriteTrack(): LiveData<Track?> = isFavoriteTrack
 
     override fun onCleared() {
         playerStateLiveData.postValue(PlayerState.StateDefault)
@@ -69,6 +79,19 @@ class PlayerViewModel : ViewModel() {
         mediaPlayer.pause()
         timerJob?.cancel()
         playerStateLiveData.postValue(PlayerState.StatePaused)
+    }
+
+    fun onFavoriteClicked(track: Track) {
+        val isFavorite = track.isFavorite
+
+        viewModelScope.launch {
+            when (isFavorite) {
+                false -> favoriteTracksInteractor.insertTrack(track)
+                true  -> favoriteTracksInteractor.deleteTrack(track)
+            }
+            track.isFavorite = !isFavorite
+            favoriteTrack.postValue(track)
+        }
     }
 
     private fun updatePlaybackTime() {

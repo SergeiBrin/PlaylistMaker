@@ -12,14 +12,21 @@
             android:id="@+id/action_searchFragment_to_playerActivity"
             app:destination="@id/playerActivity" />
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.settings.ui.fragment.SettingsFragment"
         android:label="SettingsFragment" />
+
     <fragment
         android:id="@+id/mediaLibraryFragment"
         android:name="com.example.playlistmaker.medialibrary.ui.fragment.MediaLibraryFragment"
-        android:label="MediaLibraryFragment" />
+        android:label="MediaLibraryFragment">
+        <action
+            android:id="@+id/action_media_library_fragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+    </fragment>
+
     <activity
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.player.ui.activity.PlayerActivity"

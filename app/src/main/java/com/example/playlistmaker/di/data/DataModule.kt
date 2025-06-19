@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di.data
 
 import android.content.Context.MODE_PRIVATE
+import androidx.room.Room
+import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.search.data.deserializer.TrackDeserializer
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.history.SearchHistory
@@ -17,6 +19,7 @@ import org.koin.dsl.module
 const val URL = "https://itunes.apple.com"
 const val SETTINGS_KEY = "PlaylistMakerSettings"
 const val SEARCH_HISTORY_KEY = "SearchHistory"
+const val DATABASE_NAME = "database.db"
 
 val dataModule = module {
     single<ItunesApiService> {
@@ -48,6 +51,11 @@ val dataModule = module {
     }
 
     single {
-        SearchHistory(get(named("SearchHistory")), get())
+        SearchHistory(get(named(SEARCH_HISTORY_KEY)), get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, DATABASE_NAME)
+            .build()
     }
 }
