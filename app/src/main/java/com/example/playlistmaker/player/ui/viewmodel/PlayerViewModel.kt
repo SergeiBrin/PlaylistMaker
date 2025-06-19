@@ -33,9 +33,6 @@ class PlayerViewModel(
     private val favoriteTrack = MutableLiveData<Track>()
     fun getFavoriteTrack(): LiveData<Track> = favoriteTrack
 
-    private val isFavoriteTrack = MutableLiveData<Track?>()
-    fun getIsFavoriteTrack(): LiveData<Track?> = isFavoriteTrack
-
     override fun onCleared() {
         playerStateLiveData.postValue(PlayerState.StateDefault)
         mediaPlayer.release()

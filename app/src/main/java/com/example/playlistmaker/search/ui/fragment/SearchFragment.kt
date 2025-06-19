@@ -243,7 +243,6 @@ class SearchFragment : Fragment() {
         searchViewModel.saveSearchHistoryInPreferences()
     }
 
-    // наверное лучше потом убрать
     override fun onResume() {
         super.onResume()
 
