@@ -1,17 +1,25 @@
 package com.example.playlistmaker.search.domain.interactor.impl
 
 import com.example.playlistmaker.core.model.Track
+import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.search.domain.interactor.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.repository.SearchHistoryRepository
 
 class SearchHistoryInteractorImpl(
+    private val dataBase: AppDatabase,
     private val repository: SearchHistoryRepository
 ) : SearchHistoryInteractor {
     override var historyTrackList: MutableList<Track> = mutableListOf()
 
-    override fun downloadSearchHistory() {
+    override suspend fun downloadSearchHistory() {
         historyTrackList.clear()
-        historyTrackList.addAll(repository.downloadSearchHistory())
+        val searchHistory = repository.downloadSearchHistory()
+        val ids = dataBase.trackDao().getAllTracksId()
+        historyTrackList.addAll(
+            searchHistory.map {
+                it.copy(isFavorite = it.trackId in ids)
+            }
+        )
     }
 
     override fun saveTrackInHistoryTrackList(track: Track) {
@@ -34,8 +42,8 @@ class SearchHistoryInteractorImpl(
     }
 
     private fun removeDuplicate(track: Track) {
-        if (track in historyTrackList) {
-            historyTrackList.remove(track)
+        historyTrackList.removeIf {
+            it.trackId == track.trackId
         }
     }
 }

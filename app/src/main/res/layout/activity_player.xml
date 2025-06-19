@@ -97,7 +97,7 @@
         android:id="@+id/add_playlist_button"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:background="@drawable/media_library_button"
+        android:background="@drawable/media_library_button_bg"
         android:src="@drawable/add_button"
         app:layout_constraintBottom_toTopOf="@+id/play_button"
         app:layout_constraintEnd_toStartOf="@id/play_button"
@@ -114,7 +114,7 @@
         android:src="@drawable/play_button"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/playback_time"
-        app:layout_constraintEnd_toStartOf="@id/favorites_button"
+        app:layout_constraintEnd_toStartOf="@id/like_button"
         app:layout_constraintStart_toEndOf="@id/add_playlist_button" />
 
     <ImageButton
@@ -126,19 +126,21 @@
         android:src="@drawable/pause_button"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/playback_time"
-        app:layout_constraintEnd_toStartOf="@id/favorites_button"
+        app:layout_constraintEnd_toStartOf="@id/like_button"
         app:layout_constraintStart_toEndOf="@id/add_playlist_button" />
 
     <ImageButton
-        android:id="@+id/favorites_button"
+        android:id="@+id/like_button"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:background="@drawable/media_library_button"
-        android:src="@drawable/like_button"
+        android:background="@drawable/media_library_button_bg"
+        android:src="@drawable/like_inactive"
+        android:paddingTop="2dp"
         app:layout_constraintBottom_toTopOf="@+id/play_button"
         app:layout_constraintEnd_toStartOf="@id/guideline_end_24dp"
         app:layout_constraintStart_toEndOf="@id/play_button"
-        app:layout_constraintTop_toBottomOf="@id/play_button" />
+        app:layout_constraintTop_toBottomOf="@id/play_button"
+        app:layout_constraintVertical_bias="0.496" />
 
     <TextView
         android:id="@+id/playback_time"

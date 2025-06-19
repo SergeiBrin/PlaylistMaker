@@ -14,10 +14,9 @@ class SearchViewModel(
     private val historyInteractor: SearchHistoryInteractor
 ) : ViewModel() {
     private val tracksLiveData = MutableLiveData<List<Track>?>()
-    private val historyTracksLiveData = MutableLiveData<List<Track>>(emptyList())
-
     fun getTracksLiveData(): LiveData<List<Track>?> = tracksLiveData
 
+    private val historyTracksLiveData = MutableLiveData<List<Track>>(emptyList())
     fun getHistoryTracksLiveData(): LiveData<List<Track>> = historyTracksLiveData
 
     fun searchTracks(inputText: String) {
@@ -29,8 +28,10 @@ class SearchViewModel(
     }
 
     fun downloadSearchHistory() {
-        historyInteractor.downloadSearchHistory()
-        historyTracksLiveData.postValue(historyInteractor.historyTrackList)
+        viewModelScope.launch {
+            historyInteractor.downloadSearchHistory()
+            historyTracksLiveData.postValue(historyInteractor.historyTrackList)
+        }
     }
 
     fun saveTrackInHistoryTrackList(track: Track) {

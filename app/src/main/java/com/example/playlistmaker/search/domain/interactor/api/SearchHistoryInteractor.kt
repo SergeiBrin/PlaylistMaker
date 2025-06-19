@@ -5,7 +5,7 @@ import com.example.playlistmaker.core.model.Track
 interface SearchHistoryInteractor {
     var historyTrackList: MutableList<Track>
 
-    fun downloadSearchHistory()
+    suspend fun downloadSearchHistory()
 
     fun saveTrackInHistoryTrackList(track: Track)
 

@@ -50,7 +50,7 @@ class PlayerActivity : AppCompatActivity() {
         addButton = findViewById(R.id.add_playlist_button)
         playButton = findViewById(R.id.play_button)
         pauseButton = findViewById(R.id.pause_button)
-        likeButton = findViewById(R.id.favorites_button)
+        likeButton = findViewById(R.id.like_button)
         playbackTime = findViewById(R.id.playback_time)
         duration = findViewById(R.id.duration_value)
         albumName = findViewById(R.id.album_value)
@@ -71,6 +71,10 @@ class PlayerActivity : AppCompatActivity() {
             updateCurrentTrackTime(time)
         }
 
+        playerViewModel.getFavoriteTrack().observe(this) { track ->
+            updateLikeButtonIcon(track)
+         }
+
         playerViewModel.preparePlayer(track.previewUrl)
 
         arrowBackButton.setOnClickListener {
@@ -85,7 +89,12 @@ class PlayerActivity : AppCompatActivity() {
             playerViewModel.playbackControl()
         }
 
+        likeButton.setOnClickListener {
+            playerViewModel.onFavoriteClicked(track)
+        }
+
         populatePlayerActivityViews()
+        updateLikeButtonIcon(track)
     }
 
     override fun onPause() {
@@ -109,6 +118,14 @@ class PlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(dpToPx(8f, this@PlayerActivity)))
             .placeholder(R.drawable.player_placeholder)
             .into(albumImage)
+    }
+
+    private fun updateLikeButtonIcon(track: Track) {
+        if (track.isFavorite) {
+            likeButton.setImageResource(R.drawable.like_active)
+        } else {
+            likeButton.setImageResource(R.drawable.like_inactive)
+        }
     }
 
     private fun prepareViewForStartPlayer() {
