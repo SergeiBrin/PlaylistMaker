@@ -1,9 +1,12 @@
 package com.example.playlistmaker.db.domain.interactor
 
 import com.example.playlistmaker.core.model.Track
+import com.example.playlistmaker.player.ui.result.GetTrackResult
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteTracksInteractor {
+
+    suspend fun getTrackById(trackId: Int): GetTrackResult
 
     fun getAllTracks(): Flow<List<Track>>
 

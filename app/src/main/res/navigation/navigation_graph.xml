@@ -25,10 +25,20 @@
         <action
             android:id="@+id/action_media_library_fragment_to_playerActivity"
             app:destination="@id/playerActivity" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
     </fragment>
 
     <activity
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.player.ui.activity.PlayerActivity"
-        android:label="PlayerActivity" />
+        android:label="PlayerActivity">
+    </activity>
+
+    <fragment
+        android:id="@+id/createPlaylistFragment"
+        android:name="com.example.playlistmaker.playlist.ui.fragment.CreatePlaylistFragment"
+        android:label="CreatePlaylistFragment">
+    </fragment>
 </navigation>

@@ -10,11 +10,11 @@ import com.example.playlistmaker.db.data.entity.TrackEntity
 @Dao
 interface TrackDao {
 
+    @Query("SELECT * FROM track_table WHERE track_id = :trackId")
+    suspend fun getTrackById(trackId: Int): TrackEntity?
+
     @Query("SELECT * FROM track_table ORDER BY added_at DESC")
     suspend fun getAllTracks(): List<TrackEntity>
-
-    @Query("SELECT track_id FROM track_table")
-    suspend fun getAllTracksId(): List<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(trackEntity: TrackEntity)

@@ -1,9 +1,9 @@
 package com.example.playlistmaker.search.data.repository
 
+import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.search.data.dto.SearchHistoryTrackDto
 import com.example.playlistmaker.search.data.history.SearchHistory
 import com.example.playlistmaker.search.domain.repository.SearchHistoryRepository
-import com.example.playlistmaker.core.model.Track
 
 class SearchHistoryRepositoryImpl(
     private val searchHistory: SearchHistory
