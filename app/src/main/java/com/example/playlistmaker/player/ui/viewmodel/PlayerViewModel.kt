@@ -11,8 +11,8 @@ import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.domain.interactor.FavoriteTracksInteractor
 import com.example.playlistmaker.db.domain.interactor.PlaylistInteractor
 import com.example.playlistmaker.player.domain.PlayerState
+import com.example.playlistmaker.player.domain.PlayerUiState
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
-import com.example.playlistmaker.player.ui.result.GetTrackResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,9 +22,9 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val favoriteTracksInteractor: FavoriteTracksInteractor,
-    private val playlistInteractor: PlaylistInteractor
+    private val playlistInteractor: PlaylistInteractor,
+    private val mediaPlayer: MediaPlayer
 ) : ViewModel() {
-    private var mediaPlayer = MediaPlayer()
     private var timerJob: Job? = null
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
@@ -32,14 +32,8 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.StateDefault)
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
 
-    private val currentTrackTimeLiveData = MutableLiveData<String>()
-    fun getCurrentTrackTimeLiveData(): LiveData<String> = currentTrackTimeLiveData
-
-    private val trackLiveData = MutableLiveData<Track>()
-    fun getTrackLiveData(): LiveData<Track> = trackLiveData
-
-    private val favoriteTrackLiveData = MutableLiveData<GetTrackResult>()
-    fun getFavoriteTrackLiveData(): LiveData<GetTrackResult> = favoriteTrackLiveData
+    private val playerUiStateLiveData = MutableLiveData<PlayerUiState>()
+    fun getPlayerUiStateLiveData(): LiveData<PlayerUiState> = playerUiStateLiveData
 
     private val playlistsLiveData = MutableLiveData<List<Playlist>>()
     fun getPlaylistsLiveData(): LiveData<List<Playlist>> = playlistsLiveData
@@ -103,14 +97,14 @@ class PlayerViewModel(
             }
 
             track.isFavorite = !isFavorite
-            trackLiveData.postValue(track)
+            playerUiStateLiveData.postValue(PlayerUiState.TrackData(track))
         }
     }
 
     fun getTrackById(trackId: Int) {
         viewModelScope.launch {
-            val track = favoriteTracksInteractor.getTrackById(trackId)
-            favoriteTrackLiveData.postValue(track)
+            val result = favoriteTracksInteractor.getTrackById(trackId)
+            playerUiStateLiveData.postValue(result)
         }
     }
 
@@ -123,18 +117,30 @@ class PlayerViewModel(
     }
 
     fun addTrackToPlaylist(playlist: Playlist, track: Track) {
-        if (track.trackId in playlist.trackIds) {
-            addTrackToPlaylist
-                .postValue(AddTrackInPlaylistResult
-                    .Failure("Трек уже добавлен в плейлист ${playlist.playlistName}"))
-        } else {
-            viewModelScope.launch {
-                playlistInteractor.addTrackToPlaylist(playlist, track)
+        val trackId = track.trackId
+        val playlistId = playlist.id
+
+        var isTrackInPlaylist: Boolean
+
+        viewModelScope.launch {
+            isTrackInPlaylist = playlistInteractor.isTrackInPlaylist(trackId, playlistId)
+            if (isTrackInPlaylist) {
                 addTrackToPlaylist
                     .postValue(
                         AddTrackInPlaylistResult
-                            .Success("Добавлено в плейлист ${playlist.playlistName}")
+                            .Failure(playlist.playlistName)
                     )
+            } else {
+                playlistInteractor.addTrackToPlaylist(playlist, track)
+
+                isTrackInPlaylist = playlistInteractor.isTrackInPlaylist(trackId, playlistId)
+                if (isTrackInPlaylist) {
+                    addTrackToPlaylist
+                        .postValue(
+                            AddTrackInPlaylistResult
+                                .Success(playlist.playlistName)
+                        )
+                }
             }
         }
     }
@@ -144,7 +150,7 @@ class PlayerViewModel(
             while (mediaPlayer.isPlaying) {
                 delay(UPDATE_TIME_INTERVAL)
                 val trackPosition = dateFormat.format(mediaPlayer.currentPosition)
-                currentTrackTimeLiveData.postValue(trackPosition)
+                playerUiStateLiveData.postValue(PlayerUiState.CurrentTrackTimeLiveData(trackPosition))
             }
         }
     }

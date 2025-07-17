@@ -18,9 +18,9 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.player.domain.PlayerState
+import com.example.playlistmaker.player.domain.PlayerUiState
 import com.example.playlistmaker.player.ui.adapter.PlayerPlaylistAdapter
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
-import com.example.playlistmaker.player.ui.result.GetTrackResult
 import com.example.playlistmaker.player.ui.viewmodel.PlayerViewModel
 import com.example.playlistmaker.playlist.ui.fragment.CreatePlaylistFragment
 import com.example.playlistmaker.utils.dpToPx
@@ -119,10 +119,18 @@ class PlayerActivity : AppCompatActivity() {
             when (result) {
                 is AddTrackInPlaylistResult.Success -> {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "${getString(R.string.add_track_in_playlist_success)} ${result.playlistMame}",
+                        Toast.LENGTH_LONG)
+                        .show()
                 }
                 is AddTrackInPlaylistResult.Failure ->
-                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "${getString(R.string.add_track_in_playlist_failure)} ${result.playlistMame}",
+                        Toast.LENGTH_LONG)
+                        .show()
             }
 
         }
@@ -136,29 +144,23 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        playerViewModel.getCurrentTrackTimeLiveData().observe(this) { time ->
-            updateCurrentTrackTime(time)
-        }
-
-        playerViewModel.getTrackLiveData().observe(this) { track ->
-            updateLikeButtonIcon(track)
-         }
-
-        playerViewModel.getPlaylistsLiveData().observe(this) {
-            updatePlaylists(it)
-        }
-
-        playerViewModel.getFavoriteTrackLiveData().observe(this) { result ->
-            when (result) {
-                GetTrackResult.Success -> {
+        playerViewModel.getPlayerUiStateLiveData().observe(this) { playerUiState ->
+            when (playerUiState) {
+                is PlayerUiState.TrackData -> updateLikeButtonIcon(playerUiState.track)
+                is PlayerUiState.CurrentTrackTimeLiveData -> updateCurrentTrackTime(playerUiState.trackTime)
+                PlayerUiState.FavoriteTrackSuccessEvent -> {
                     track.isFavorite = true
                     likeButton.setImageResource(R.drawable.like_active)
                 }
-                GetTrackResult.Failure -> {
+                PlayerUiState.FavoriteTrackFailureEvent -> {
                     track.isFavorite = false
                     likeButton.setImageResource(R.drawable.like_inactive)
                 }
             }
+        }
+
+        playerViewModel.getPlaylistsLiveData().observe(this) {
+            updatePlaylists(it)
         }
 
         playerViewModel.preparePlayer(track.previewUrl)

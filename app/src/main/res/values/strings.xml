@@ -33,4 +33,6 @@
     <string name="playlist_description">Описание</string>
     <string name="create_playlist">Создать</string>
     <string name="tracks_count">%1$d треков</string>
+    <string name="add_track_in_playlist_failure">Трек уже добавлен в плейлист</string>
+    <string name="add_track_in_playlist_success">Добавлено в плейлист</string>
 </resources>

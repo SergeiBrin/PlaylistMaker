@@ -7,7 +7,7 @@ import com.example.playlistmaker.db.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.db.data.converters.PlaylistTrackConverter
 import com.example.playlistmaker.db.domain.repository.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class PlaylistRepositoryImpl(
     val dataBase: AppDatabase,
@@ -15,11 +15,20 @@ class PlaylistRepositoryImpl(
     val playlistTrackConverter: PlaylistTrackConverter
 ) : PlaylistRepository {
 
-    override fun getAllPlaylists(): Flow<List<Playlist>>  = flow {
-        val playlistEntities = dataBase.playlistDao().getAllPlaylists()
-        val playlists = playlistConverter.map(playlistEntities)
-        emit(playlists)
+    override suspend fun getPlaylistById(playlistId: Int): Playlist? {
+        val playlistEntity = dataBase.playlistDao().getPlaylistById(playlistId)
+        return playlistEntity?.let { playlistConverter.map(it) }
     }
+
+    override suspend fun getAllPlaylists(): Flow<List<Playlist>> {
+        return dataBase
+            .playlistDao()
+            .getAllPlaylists()
+            .map {
+                entities -> playlistConverter.map(entities)
+            }
+    }
+
 
     override suspend fun insertPlaylist(playlist: Playlist) {
         val playlistEntity = playlistConverter.map(playlist)

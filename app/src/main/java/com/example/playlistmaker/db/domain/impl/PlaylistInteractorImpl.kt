@@ -10,7 +10,12 @@ class PlaylistInteractorImpl(
     val playlistRepository: PlaylistRepository
 ) : PlaylistInteractor {
 
-    override fun getAllPlaylists(): Flow<List<Playlist>> {
+    override suspend fun isTrackInPlaylist(trackId: Int, playlistId: Int): Boolean {
+        val trackIds = playlistRepository.getPlaylistById(playlistId)?.trackIds
+        return trackIds?.contains(trackId) == true
+    }
+
+    override suspend fun getAllPlaylists(): Flow<List<Playlist>> {
         return playlistRepository.getAllPlaylists()
     }
 
