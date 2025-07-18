@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.app.appModule
 import com.example.playlistmaker.di.data.dataModule
 import com.example.playlistmaker.di.domain.interactorModule
+import com.example.playlistmaker.di.player.mediaPlayerModule
 import com.example.playlistmaker.di.repository.repositoryModule
 import com.example.playlistmaker.di.viewmodel.viewModelModule
 import org.koin.android.ext.android.inject
@@ -27,7 +28,14 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, dataModule, repositoryModule, interactorModule, viewModelModule)
+            modules(
+                appModule,
+                dataModule,
+                repositoryModule,
+                interactorModule,
+                viewModelModule,
+                mediaPlayerModule
+            )
         }
 
         val theme = settings.getString(THEME_SETTINGS_KEY, null)

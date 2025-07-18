@@ -1,12 +1,10 @@
 package com.example.playlistmaker.search.domain.interactor.impl
 
 import com.example.playlistmaker.core.model.Track
-import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.search.domain.interactor.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.repository.SearchHistoryRepository
 
 class SearchHistoryInteractorImpl(
-    private val dataBase: AppDatabase,
     private val repository: SearchHistoryRepository
 ) : SearchHistoryInteractor {
     override var historyTrackList: MutableList<Track> = mutableListOf()
@@ -14,12 +12,7 @@ class SearchHistoryInteractorImpl(
     override suspend fun downloadSearchHistory() {
         historyTrackList.clear()
         val searchHistory = repository.downloadSearchHistory()
-        val ids = dataBase.trackDao().getAllTracksId()
-        historyTrackList.addAll(
-            searchHistory.map {
-                it.copy(isFavorite = it.trackId in ids)
-            }
-        )
+        historyTrackList.addAll(searchHistory)
     }
 
     override fun saveTrackInHistoryTrackList(track: Track) {

@@ -245,8 +245,6 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if (!inputText.isNullOrEmpty()) searchTracks()
         searchViewModel.downloadSearchHistory()
     }
 

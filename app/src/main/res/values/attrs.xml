@@ -10,4 +10,8 @@
     <attr name="colorSwitchTrack" format="color" />
     <attr name="colorOnHeader" format="color" />
     <attr name="themeBackground" format="color" />
+    <attr name="colorEditTextStrokeDefault" format="color" />
+    <attr name="colorEditTextStrokeFocused" format="color" />
+    <attr name="colorEditText" format="color" />
+    <attr name="bottomSheetRectangle" format="color" />
 </resources>

@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.search.ui.funinterface.TrackClickListener
 import com.example.playlistmaker.core.model.Track
+import com.example.playlistmaker.search.ui.funinterface.TrackClickListener
 
 class TracksAdapter(
     val tracks: List<Track>,

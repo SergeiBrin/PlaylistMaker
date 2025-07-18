@@ -4,18 +4,23 @@ import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.db.data.converters.TrackDbConverter
 import com.example.playlistmaker.db.domain.repository.FavoriteTracksRepository
+import com.example.playlistmaker.player.domain.PlayerUiState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class FavoriteTracksRepositoryImpl(
     val dataBase: AppDatabase,
     val trackConverter: TrackDbConverter
 ) : FavoriteTracksRepository {
 
-    override fun getAllTracks(): Flow<List<Track>> = flow {
+    override suspend fun getTrackById(trackId: Int): PlayerUiState {
+        val trackEntity = dataBase.trackDao().getTrackById(trackId)
+        return if (trackEntity != null) PlayerUiState.FavoriteTrackSuccessEvent else PlayerUiState.FavoriteTrackFailureEvent
+    }
+
+    override suspend fun getAllTracks(): Flow<List<Track>> {
         val trackEntities = dataBase.trackDao().getAllTracks()
-        val tracks = trackConverter.map(trackEntities)
-        emit(tracks)
+        return trackEntities.map { trackConverter.map(it) }
     }
 
     override suspend fun insertTrack(track: Track) {

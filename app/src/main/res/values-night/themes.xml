@@ -24,8 +24,15 @@
 
         <item name="iconsOnTheSettingsScreen">@color/white</item>
 
+        <!-- CreatePlaylist Screen -->
+        <item name="colorEditTextStrokeDefault">@color/white</item>
+        <item name="colorEditTextStrokeFocused">@color/white</item>
+        <item name="colorEditText">@color/white</item>
+
+
         <!-- Background and icon color. -->
         <item name="themeBackground">@color/navy_blue</item>
+        <item name="bottomSheetRectangle">@color/white</item>
         <item name="android:textColorHint">@color/navy_blue</item>
 
         <!-- Customize your theme here. -->

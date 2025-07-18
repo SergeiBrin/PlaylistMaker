@@ -1,7 +1,7 @@
 <resources>
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
 
@@ -23,8 +23,14 @@
 
         <item name="iconsOnTheSettingsScreen">@color/light_gray</item>
 
+        <!-- CreatePlaylist Screen -->
+        <item name="colorEditTextStrokeDefault">@color/light_gray</item>
+        <item name="colorEditTextStrokeFocused">@color/purple_500</item>
+        <item name="colorEditText">@color/navy_blue</item>
+
         <!-- Background and icon color. -->
         <item name="themeBackground">@color/white</item>
+        <item name="bottomSheetRectangle">@color/very_light_gray</item>
         <item name="android:textColorHint">@color/light_gray</item>
 
         <!-- Status bar color. -->

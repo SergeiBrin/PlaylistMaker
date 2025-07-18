@@ -17,6 +17,7 @@
     <string name="problems_when_searching_for_a_tracks">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_history">Вы искали</string>
     <string name="new_playlist">Новый плейлист</string>
+    <string name="add_in_playlist">Добавить в плейлист</string>
     <string name="not_found_playlist">Вы не создали\n ни одного плейлиста</string>
     <string name="the_media_is_empty">Ваша медиатека пуста</string>
     <string name="clear_search_history">Очистить историю</string>
@@ -28,4 +29,10 @@
     <string name="country">Страна</string>
     <string name="favorite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="playlist_name">Название*</string>
+    <string name="playlist_description">Описание</string>
+    <string name="create_playlist">Создать</string>
+    <string name="tracks_count">%1$d треков</string>
+    <string name="add_track_in_playlist_failure">Трек уже добавлен в плейлист</string>
+    <string name="add_track_in_playlist_success">Добавлено в плейлист</string>
 </resources>
