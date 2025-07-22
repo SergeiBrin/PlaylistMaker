@@ -107,9 +107,12 @@ class SearchFragment : Fragment() {
             }
         }
 
-        trackAdapter = TracksAdapter(tracks) { track ->
-            onTrackClickDebounce(track)
-        }
+        trackAdapter = TracksAdapter(
+            tracks,
+            onTrackClick = { track ->
+                onTrackClickDebounce(track)
+            }
+        )
 
         searchTrackRecyclerView = binding.recycleViewTracksSearch
         placeholderImage = binding.searchPlaceholderImage

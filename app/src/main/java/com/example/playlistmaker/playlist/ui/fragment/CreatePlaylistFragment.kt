@@ -23,6 +23,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.core.model.Playlist
+import com.example.playlistmaker.core.util.Result
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.playlist.ui.viewmodel.CreatePlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -30,28 +31,27 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
+open class CreatePlaylistFragment : Fragment() {
+    protected val createPlaylistViewModel: CreatePlaylistViewModel by viewModel()
 
-class CreatePlaylistFragment : Fragment() {
-    private val createPlaylistViewModel: CreatePlaylistViewModel by viewModel()
+    protected lateinit var confirmDialog: MaterialAlertDialogBuilder
 
-    lateinit var confirmDialog: MaterialAlertDialogBuilder
+    protected lateinit var binding: FragmentCreatePlaylistBinding
+    protected lateinit var headerTitle: TextView
+    protected lateinit var arrowBackButton: ImageButton
+    protected lateinit var playlistImage: ImageView
+    protected lateinit var imageButton: ImageView
+    protected lateinit var editTextPlaylistName: EditText
+    protected lateinit var playlistNameLabel: TextView
+    protected lateinit var editTextPlaylistDescription: EditText
+    protected lateinit var playlistDescriptionLabel: TextView
+    protected lateinit var createButton: AppCompatButton
 
-    private lateinit var binding: FragmentCreatePlaylistBinding
-    private lateinit var arrowBackButton: ImageButton
-    private lateinit var playlistImage: ImageView
-    private lateinit var imageButton: ImageView
-    private lateinit var editTextPlaylistName: EditText
-    private lateinit var playlistNameLabel: TextView
-    private lateinit var editTextPlaylistDescription: EditText
-    private lateinit var playlistDescriptionLabel: TextView
-    private lateinit var createButton: AppCompatButton
+    protected var inputPlaylistName = ""
+    protected var inputPlaylistDescription = ""
+    protected var playlistImageUri: Uri? = null
 
-    private var inputPlaylistName = ""
-    private var inputPlaylistDescription = ""
-    private var playlistImageUri: Uri? = null
-
-
-    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    protected val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             playlistImageUri = uri
             addImageToPlaylist(uri)
@@ -70,8 +70,8 @@ class CreatePlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("CreatePlaylist", "onCreateView")
 
+        headerTitle = binding.headerTitle
         arrowBackButton = binding.arrowBackCreatePlaylist
         playlistImage = binding.playlistImage
         imageButton = binding.addImageButton
@@ -89,6 +89,18 @@ class CreatePlaylistFragment : Fragment() {
 
             editTextPlaylistName.setText(playlistName)
             editTextPlaylistName.setText(playlistDescription)
+        }
+
+        createPlaylistViewModel.getCreatePlaylistLiveData().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Success -> {
+                    saveImageToPrivateStorage()
+                    parentFragmentManager.setFragmentResult("playlist_added", Bundle())
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
+
+                is Result.Failure -> requireActivity().supportFragmentManager.popBackStack()
+            }
         }
 
         arrowBackButton.setOnClickListener {
@@ -141,10 +153,6 @@ class CreatePlaylistFragment : Fragment() {
                     playlistImageUri = playlistImageUri
                 )
             )
-
-            saveImageToPrivateStorage()
-            parentFragmentManager.setFragmentResult("playlist_added", Bundle())
-            requireActivity().supportFragmentManager.popBackStack()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -188,7 +196,7 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
-    private fun saveImageToPrivateStorage() {
+    protected fun saveImageToPrivateStorage() {
         val filePath = File(requireContext()
             .getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist-album")
 

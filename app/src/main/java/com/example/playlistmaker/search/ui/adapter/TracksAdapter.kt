@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Track
-import com.example.playlistmaker.search.ui.funinterface.TrackClickListener
 
 class TracksAdapter(
     val tracks: List<Track>,
-    val clickListener: TrackClickListener
+    private val onTrackClick: (Track) -> Unit,
+    private val onTrackLongClick: (Track) -> Unit = {}
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -26,7 +26,12 @@ class TracksAdapter(
         holder.bind(track)
 
         holder.itemView.setOnClickListener {
-            clickListener.onTrackClick(track)
+            onTrackClick(track)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onTrackLongClick(track)
+            true
         }
     }
 }

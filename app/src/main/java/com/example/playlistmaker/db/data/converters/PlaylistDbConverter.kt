@@ -35,6 +35,17 @@ class PlaylistDbConverter(
         )
     }
 
+    fun mapForDelete(playlist: Playlist): PlaylistEntity {
+        return PlaylistEntity(
+            id = playlist.id,
+            playlistName = playlist.playlistName,
+            playlistDescription = playlist.playlistDescription,
+            playlistImageUri = playlist.playlistImageUri?.path,
+            trackIds = gson.toJson(playlist.trackIds),
+            trackCount = playlist.trackCount - 1
+        )
+    }
+
     fun map(playlistEntity: PlaylistEntity): Playlist {
         return Playlist(
             id = playlistEntity.id,

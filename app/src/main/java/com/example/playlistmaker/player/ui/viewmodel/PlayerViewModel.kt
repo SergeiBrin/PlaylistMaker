@@ -11,8 +11,8 @@ import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.domain.interactor.FavoriteTracksInteractor
 import com.example.playlistmaker.db.domain.interactor.PlaylistInteractor
 import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.player.domain.PlayerUiState
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
+import com.example.playlistmaker.player.ui.result.PlayerUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -87,7 +87,7 @@ class PlayerViewModel(
     }
 
     fun onFavoriteClicked(track: Track) {
-        val isFavorite = track.isFavorite // false
+        val isFavorite = track.isFavorite
 
         viewModelScope.launch {
             if (isFavorite) {
@@ -103,8 +103,12 @@ class PlayerViewModel(
 
     fun getTrackById(trackId: Int) {
         viewModelScope.launch {
-            val result = favoriteTracksInteractor.getTrackById(trackId)
-            playerUiStateLiveData.postValue(result)
+            val track = favoriteTracksInteractor.getTrackById(trackId)
+            if (track != null) {
+                playerUiStateLiveData.postValue(PlayerUiState.FavoriteTrackSuccessEvent)
+            } else {
+                playerUiStateLiveData.postValue(PlayerUiState.FavoriteTrackFailureEvent)
+            }
         }
     }
 

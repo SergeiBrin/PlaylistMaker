@@ -36,4 +36,6 @@ class PlaylistTrackEntity(
     @ColumnInfo(name = "preview_url")
     val previewUrl: String,
 
+    @ColumnInfo(name = "added_at")
+    val addedAt: Long = System.currentTimeMillis()
 )

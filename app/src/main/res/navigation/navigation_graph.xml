@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
     app:startDestination="@id/mediaLibraryFragment">
 
@@ -28,6 +29,9 @@
         <action
             android:id="@+id/action_mediaLibraryFragment_to_createPlaylistFragment"
             app:destination="@id/createPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
     </fragment>
 
     <activity
@@ -41,4 +45,20 @@
         android:name="com.example.playlistmaker.playlist.ui.fragment.CreatePlaylistFragment"
         android:label="CreatePlaylistFragment">
     </fragment>
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.playlistmaker.playlist.ui.fragment.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" >
+        <action
+            android:id="@+id/action_playlistFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+        <action
+            android:id="@+id/action_playlistFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.playlistmaker.playlist.ui.fragment.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" />
 </navigation>
