@@ -45,10 +45,6 @@ class PlaylistsFragment : Fragment() {
 
         adapter = MediaLibraryPlaylistAdapter(playlists) {
             val action = MediaLibraryFragmentDirections.actionMediaLibraryFragmentToPlaylistFragment(it.id)
-//            val bundle = Bundle().apply { // bundle
-//                putInt(ID, it.id)
-//            }
-
             findNavController().navigate(action)
         }
 
