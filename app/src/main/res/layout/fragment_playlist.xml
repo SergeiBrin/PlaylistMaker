@@ -12,13 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/arrow_back_playlist"
-            style="@style/ArrowBackHeaderIcon"
-            android:src="@drawable/arrow_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/playlist_image"
             android:layout_width="0dp"
@@ -40,6 +33,13 @@
             app:layout_constraintStart_toStartOf="@+id/playlist_image"
             app:layout_constraintTop_toTopOf="@+id/playlist_image"
             app:srcCompat="@drawable/playlist_fragment_placeholder" />
+
+        <ImageButton
+            android:id="@+id/arrow_back_playlist"
+            style="@style/ArrowBackHeaderIcon"
+            android:src="@drawable/arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/playlist_name"

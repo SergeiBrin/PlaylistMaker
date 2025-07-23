@@ -16,7 +16,7 @@ class PlaylistDbConverter(
             id = playlist.id,
             playlistName = playlist.playlistName,
             playlistDescription = playlist.playlistDescription,
-            playlistImageUri = playlist.playlistImageUri?.path,
+            playlistImageUri = playlist.playlistImageUri?.toString(),
             trackIds = gson.toJson(playlist.trackIds),
             trackCount = playlist.trackCount
         )
@@ -29,7 +29,7 @@ class PlaylistDbConverter(
             id = playlist.id,
             playlistName = playlist.playlistName,
             playlistDescription = playlist.playlistDescription,
-            playlistImageUri = playlist.playlistImageUri?.path,
+            playlistImageUri = playlist.playlistImageUri?.toString(),
             trackIds = gson.toJson(playlist.trackIds),
             trackCount = playlist.trackCount + 1
         )
@@ -40,7 +40,7 @@ class PlaylistDbConverter(
             id = playlist.id,
             playlistName = playlist.playlistName,
             playlistDescription = playlist.playlistDescription,
-            playlistImageUri = playlist.playlistImageUri?.path,
+            playlistImageUri = playlist.playlistImageUri?.toString(),
             trackIds = gson.toJson(playlist.trackIds),
             trackCount = playlist.trackCount - 1
         )

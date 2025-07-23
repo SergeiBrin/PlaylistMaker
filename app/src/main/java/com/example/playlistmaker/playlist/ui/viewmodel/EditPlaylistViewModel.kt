@@ -22,12 +22,13 @@ class EditPlaylistViewModel(
         playlistImageUri: Uri?
     ) {
         viewModelScope.launch {
-            val updateCount = playlistInteractor.updatePlaylist(
-                id,
-                playlistName,
-                playlistDescription,
-                playlistImageUri
-            )
+            val updateCount = playlistInteractor
+                .updatePlaylist(
+                    id,
+                    playlistName,
+                    playlistDescription,
+                    playlistImageUri
+                )
 
             if (updateCount != 0) {
                 updatePlaylistLiveData.postValue(Result.Success)

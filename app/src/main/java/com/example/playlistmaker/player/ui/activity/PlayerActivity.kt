@@ -17,9 +17,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
-import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.ui.adapter.PlayerPlaylistAdapter
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
+import com.example.playlistmaker.player.ui.result.PlayerState
 import com.example.playlistmaker.player.ui.result.PlayerUiState
 import com.example.playlistmaker.player.ui.viewmodel.PlayerViewModel
 import com.example.playlistmaker.playlist.ui.fragment.CreatePlaylistFragment

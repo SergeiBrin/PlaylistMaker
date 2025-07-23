@@ -10,7 +10,7 @@ import com.example.playlistmaker.db.domain.interactor.PlaylistInteractor
 import kotlinx.coroutines.launch
 
 open class CreatePlaylistViewModel(
-    protected val playlistInteractor: PlaylistInteractor
+    protected val playlistInteractor: PlaylistInteractor,
 ) : ViewModel() {
 
     private val createPlaylistLiveData = MutableLiveData<Result>()
@@ -19,6 +19,7 @@ open class CreatePlaylistViewModel(
     fun insertPlaylist(playlist: Playlist) {
         viewModelScope.launch {
             val createPlaylistCount = playlistInteractor.insertPlaylist(playlist)
+
             if (createPlaylistCount != -1L) {
                 createPlaylistLiveData.postValue(Result.Success)
             } else {

@@ -8,7 +8,7 @@ import com.example.playlistmaker.db.domain.repository.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistInteractorImpl(
-    val playlistRepository: PlaylistRepository
+    val playlistRepository: PlaylistRepository,
 ) : PlaylistInteractor {
 
     override suspend fun isTrackInPlaylist(trackId: Int, playlistId: Int): Boolean {

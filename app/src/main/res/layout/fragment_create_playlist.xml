@@ -84,6 +84,17 @@
         app:layout_constraintStart_toStartOf="@+id/playlist_image"
         app:layout_constraintTop_toTopOf="@+id/playlist_image" />
 
+    <ImageView
+        android:id="@+id/playlist_image_placeholder"
+        android:layout_width="312dp"
+        android:layout_height="312dp"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="@+id/playlist_image"
+        app:layout_constraintEnd_toEndOf="@+id/playlist_image"
+        app:layout_constraintStart_toStartOf="@+id/playlist_image"
+        app:layout_constraintTop_toTopOf="@+id/playlist_image"
+        app:srcCompat="@drawable/playlist_fragment_placeholder" />
+
     <EditText
         android:id="@+id/playlist_name"
         style="@style/CreatePlaylistEditText"

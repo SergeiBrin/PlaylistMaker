@@ -2,6 +2,7 @@ package com.example.playlistmaker.playlist.ui.fragment
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -18,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -26,6 +28,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
@@ -45,7 +48,8 @@ class PlaylistFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistBinding
     private val playlistViewModel: PlaylistViewModel by viewModel()
 
-    private var playlistId: Int? = null
+    val args: PlaylistFragmentArgs by navArgs()
+    private val playlistId: Int by lazy { args.playlistId }
 
     private lateinit var arrowBackButton: ImageButton
     private lateinit var playlistImage: ImageView
@@ -55,6 +59,8 @@ class PlaylistFragment : Fragment() {
     private lateinit var playlistTimeAndCount: TextView
     private lateinit var shareButton: ImageView
     private lateinit var moreButton: ImageView
+
+    private var playlistImageUri: Uri? = null
 
     private lateinit var bottomSheetTracks: LinearLayout
     private lateinit var bottomSheetTracksBehavior: BottomSheetBehavior<LinearLayout>
@@ -88,8 +94,6 @@ class PlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        playlistId = arguments?.getInt(ID)
 
         arrowBackButton = binding.arrowBackPlaylist
         playlistImage = binding.playlistImage
@@ -141,6 +145,8 @@ class PlaylistFragment : Fragment() {
         playlistViewModel.getPlaylistLiveData().observe(viewLifecycleOwner) { result ->
             updatePlaylistTracks(result.tracks)
             bindPlaylistView(result.playlist)
+            addPlaylistImageUri(result.playlist)
+
             bottomSheetTracks.post {
                 bottomSheetTracksBehavior.apply {
                     peekHeight = calculateBottomSheetTracksPeekHeight()
@@ -156,7 +162,7 @@ class PlaylistFragment : Fragment() {
             }
         }
 
-        playlistViewModel.getPlaylistById(playlistId!!)
+        playlistViewModel.getPlaylistById(playlistId)
 
         arrowBackButton.setOnClickListener {
             findNavController().popBackStack()
@@ -182,12 +188,19 @@ class PlaylistFragment : Fragment() {
         }
 
         bottomSheetEditButton.setOnClickListener {
-            val bundle = Bundle().apply {
-                putInt(ID, playlistId!!)
-                putCharSequence(PLAYLIST_NAME, playlistName.text)
-                putCharSequence(PLAYLIST_DESCRIPTION, playlistDescription.text)
-            }
-            findNavController().navigate(R.id.action_playlistFragment_to_editPlaylistFragment, bundle)
+            val playlistName = playlistName.text.toString()
+            val playlistDescription = playlistDescription.text.toString()
+            val playlistImageUri = playlistImageUri?.toString()
+
+            val action = PlaylistFragmentDirections
+                .actionPlaylistFragmentToEditPlaylistFragment(
+                    playlistId,
+                    playlistName,
+                    playlistDescription,
+                    playlistImageUri
+                )
+
+            findNavController().navigate(action)
         }
 
         bottomSheetDeleteButton.setOnClickListener {
@@ -215,6 +228,10 @@ class PlaylistFragment : Fragment() {
 
     }
 
+    private fun addPlaylistImageUri(playlist: Playlist) {
+        playlistImageUri = playlist.playlistImageUri
+    }
+
     private fun bindPlaylistView(playlist: Playlist) {
         playlistName.text = playlist.playlistName
 
@@ -233,8 +250,11 @@ class PlaylistFragment : Fragment() {
         val filePath = File(requireContext()
             .getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist-album")
         val file = File(filePath, "${playlist.playlistName}.jpg")
+        val signature = ObjectKey(file.lastModified())
+
         Glide.with(playlistImage)
             .load(file)
+            .signature(signature)
             .transform(
                 CenterCrop()
             )
@@ -323,7 +343,7 @@ class PlaylistFragment : Fragment() {
                 dialog.dismiss()
             }
             .setPositiveButton(getString(R.string.yes)) { dialog, which ->
-                playlistViewModel.deleteTrackFromPlaylist(playlistId!!, track.trackId)
+                playlistViewModel.deleteTrackFromPlaylist(playlistId, track.trackId)
             }
 
         deletePlaylistTrackDialog.show()
@@ -380,9 +400,6 @@ class PlaylistFragment : Fragment() {
     }
 
     companion object {
-        private const val ID = "PLAYLIST_ID"
-        private const val PLAYLIST_NAME = "PLAYLIST_NAME"
-        private const val PLAYLIST_DESCRIPTION = "PLAYLIST_DESCRIPTION"
         private const val INTENT_TRACK_KEY = "TRACK"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }

@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.util.Result
 import com.example.playlistmaker.playlist.ui.viewmodel.EditPlaylistViewModel
@@ -21,20 +24,22 @@ import java.io.File
 
 class EditPlaylistFragment : CreatePlaylistFragment() {
     private val editPlaylistViewModel: EditPlaylistViewModel by viewModel()
+    private val args: EditPlaylistFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val playlistId = arguments?.getInt(ID)
-        val playlistName = arguments?.getCharSequence(PLAYLIST_NAME)
-        val playlistDescription = arguments?.getCharSequence(PLAYLIST_DESCRIPTION)
+        val playlistId = args.playlistId
+        val playlistName = args.playlistName
+        val playlistDescription = args.playlistDescription
+        playlistImageUri = args.playlistImageUri?.toUri()
 
         headerTitle.text = getString(R.string.edit)
         createButton.text = getString(R.string.save)
 
         editTextPlaylistName.setText(playlistName)
         editTextPlaylistDescription.setText(playlistDescription)
-        downloadPlaylistImage(playlistName.toString())
+        downloadPlaylistImage(playlistName)
 
         editPlaylistViewModel.getUpdatePlaylistLiveData().observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -57,7 +62,7 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
 
         createButton.setOnClickListener {
             editPlaylistViewModel.updatePlaylist(
-                playlistId!!,
+                playlistId,
                 inputPlaylistName,
                 inputPlaylistDescription,
                 playlistImageUri
@@ -68,9 +73,13 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
     private fun downloadPlaylistImage(playlistName: String) {
         val filePath = File(requireContext()
             .getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist-album")
-        val file = File(filePath, "${playlistName.toString()}.jpg")
+
+        val file = File(filePath, "${playlistName}.jpg")
+        val signature = ObjectKey(file.lastModified())
+
         Glide.with(playlistImage)
             .load(file)
+            .signature(signature)
             .transform(
                 CenterCrop()
             )
@@ -81,7 +90,8 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    imageButton.isVisible = true
+                    imageButton.isVisible = false
+                    playlistImagePlaceholder.isVisible = true
                     return false
                 }
 
@@ -93,16 +103,10 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
                     isFirstResource: Boolean
                 ): Boolean {
                     imageButton.isVisible = false
+                    playlistImagePlaceholder.isVisible = false
                     return false
                 }
             })
             .into(playlistImage)
-
-    }
-
-    companion object {
-        private const val ID = "PLAYLIST_ID"
-        private const val PLAYLIST_NAME = "PLAYLIST_NAME"
-        private const val PLAYLIST_DESCRIPTION = "PLAYLIST_DESCRIPTION"
     }
 }

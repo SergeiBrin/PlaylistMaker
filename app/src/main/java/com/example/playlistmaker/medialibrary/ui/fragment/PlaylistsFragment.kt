@@ -44,11 +44,12 @@ class PlaylistsFragment : Fragment() {
         recycleView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         adapter = MediaLibraryPlaylistAdapter(playlists) {
-            val bundle = Bundle().apply {
-                putInt(ID, it.id)
-            }
+            val action = MediaLibraryFragmentDirections.actionMediaLibraryFragmentToPlaylistFragment(it.id)
+//            val bundle = Bundle().apply { // bundle
+//                putInt(ID, it.id)
+//            }
 
-            findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment, bundle)
+            findNavController().navigate(action)
         }
 
         recycleView.adapter = adapter
@@ -77,8 +78,6 @@ class PlaylistsFragment : Fragment() {
     }
 
     companion object {
-
-        private const val ID = "PLAYLIST_ID"
         fun newInstance(): Fragment {
             return PlaylistsFragment()
         }

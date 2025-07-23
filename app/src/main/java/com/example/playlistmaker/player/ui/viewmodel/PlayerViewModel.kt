@@ -10,8 +10,8 @@ import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.domain.interactor.FavoriteTracksInteractor
 import com.example.playlistmaker.db.domain.interactor.PlaylistInteractor
-import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
+import com.example.playlistmaker.player.ui.result.PlayerState
 import com.example.playlistmaker.player.ui.result.PlayerUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.util.Result
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
@@ -46,12 +47,13 @@ open class CreatePlaylistFragment : Fragment() {
     protected lateinit var editTextPlaylistDescription: EditText
     protected lateinit var playlistDescriptionLabel: TextView
     protected lateinit var createButton: AppCompatButton
+    protected lateinit var playlistImagePlaceholder: ImageView
 
     protected var inputPlaylistName = ""
     protected var inputPlaylistDescription = ""
     protected var playlistImageUri: Uri? = null
 
-    protected val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             playlistImageUri = uri
             addImageToPlaylist(uri)
@@ -80,6 +82,9 @@ open class CreatePlaylistFragment : Fragment() {
         playlistNameLabel = binding.playlistNameLabel
         playlistDescriptionLabel = binding.playlistDescriptionLabel
         createButton = binding.createPlaylistButton
+        playlistImagePlaceholder = binding.playlistImagePlaceholder
+
+        playlistImagePlaceholder.isVisible = false
 
         buildDialog()
 
@@ -145,7 +150,11 @@ open class CreatePlaylistFragment : Fragment() {
         }
 
         createButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Плейлист $inputPlaylistName создан", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.playlist_created, inputPlaylistName),
+                Toast.LENGTH_LONG
+            ).show()
             createPlaylistViewModel.insertPlaylist(
                 Playlist(
                     playlistName = inputPlaylistName,
@@ -168,18 +177,19 @@ open class CreatePlaylistFragment : Fragment() {
 
 
     private fun addImageToPlaylist(uri: Uri) {
+        playlistImagePlaceholder.isVisible = false
         imageButton.isVisible = false
         playlistImage.setImageURI(uri)
     }
 
     private fun buildDialog() {
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setNegativeButton("Нет") { dialog, which ->
+            .setTitle(getString(R.string.dialog_finish_playlist_title))
+            .setMessage(getString(R.string.dialog_finish_playlist_message))
+            .setNegativeButton(getString(R.string.no)) { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("Завершить") { dialog, which ->
+            .setPositiveButton(getString(R.string.finish)) { dialog, which ->
                 requireActivity().supportFragmentManager.popBackStack()
             }
     }
@@ -220,5 +230,4 @@ open class CreatePlaylistFragment : Fragment() {
         const val PLAYLIST_NAME = "PLAYLIST_NAME"
         const val PLAYLIST_DESCRIPTION = "PLAYLIST_DESCRIPTION"
     }
-
 }

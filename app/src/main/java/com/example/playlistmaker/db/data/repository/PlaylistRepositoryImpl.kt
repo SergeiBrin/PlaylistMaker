@@ -55,8 +55,8 @@ class PlaylistRepositoryImpl(
         playlistDescription: String,
         playlistImageUri: Uri?
     ): Int {
-        val uriPath = playlistImageUri?.path
-        return dataBase.playlistDao().updatePlaylist(id, playlistName, playlistDescription, uriPath)
+        val uri = playlistImageUri?.toString()
+        return dataBase.playlistDao().updatePlaylist(id, playlistName, playlistDescription, uri)
     }
 
     override suspend fun getPlaylistTracksByIds(ids: List<Int>): Flow<List<Track>> {
