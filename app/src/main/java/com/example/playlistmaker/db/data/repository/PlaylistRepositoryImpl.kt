@@ -1,5 +1,6 @@
 package com.example.playlistmaker.db.data.repository
 
+import android.net.Uri
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.data.AppDatabase
@@ -29,10 +30,15 @@ class PlaylistRepositoryImpl(
             }
     }
 
+    override suspend fun getAllPlaylistsOnce(): List<Playlist> {
+        val playlists = dataBase.playlistDao().getAllPlaylistsOnce()
+        return playlistConverter.map(playlists)
+    }
 
-    override suspend fun insertPlaylist(playlist: Playlist) {
+
+    override suspend fun insertPlaylist(playlist: Playlist): Long {
         val playlistEntity = playlistConverter.map(playlist)
-        dataBase.playlistDao().insertPlaylist(playlistEntity)
+        return dataBase.playlistDao().insertPlaylist(playlistEntity)
     }
 
     override suspend fun addTrackToPlaylist(playlist: Playlist, track: Track) {
@@ -40,6 +46,42 @@ class PlaylistRepositoryImpl(
         val playlistTrackEntity = playlistTrackConverter.map(track)
 
         dataBase.playListTrackDao().insertPlaylistTrack(playlistTrackEntity)
-        dataBase.playlistDao().addTrackToPlaylist(playlistEntity)
+        dataBase.playlistDao().updateTracksToPlaylist(playlistEntity)
+    }
+
+    override suspend fun updatePlaylist(
+        id: Int,
+        playlistName: String,
+        playlistDescription: String,
+        playlistImageUri: Uri?
+    ): Int {
+        val uri = playlistImageUri?.toString()
+        return dataBase.playlistDao().updatePlaylist(id, playlistName, playlistDescription, uri)
+    }
+
+    override suspend fun getPlaylistTracksByIds(ids: List<Int>): Flow<List<Track>> {
+        return dataBase
+            .playListTrackDao()
+            .getTracksByIds(ids)
+            .map {
+                playlistTrackConverter.map(it)
+            }
+    }
+
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist): Int {
+        val playlistEntity = playlistConverter.mapForDelete(playlist)
+        return dataBase.playlistDao().updateTracksToPlaylist(playlistEntity)
+    }
+
+    override suspend fun deletePlaylistTrackById(trackId: Int) {
+        dataBase.playListTrackDao().deletePlaylistTrack(trackId)
+    }
+
+    override suspend fun deletePlaylistTracksByIds(trackIds: List<Int>) {
+        dataBase.playListTrackDao().deletePlaylistTracksByIds(trackIds)
+    }
+
+    override suspend fun deletePlaylistById(playlistId: Int): Int {
+        return dataBase.playlistDao().deletePlaylistById(playlistId)
     }
 }

@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _, ->
-            if (destination.id == R.id.createPlaylistFragment) {
+            if (destination.id == R.id.createPlaylistFragment
+                || destination.id == R.id.playlistFragment) {
                 line.isVisible = false
                 bottomNavigationView.isVisible = false
             } else {

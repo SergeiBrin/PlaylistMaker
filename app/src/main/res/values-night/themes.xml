@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/bright_blue</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
 
@@ -35,6 +35,7 @@
         <item name="bottomSheetRectangle">@color/white</item>
         <item name="android:textColorHint">@color/navy_blue</item>
 
+        <item name="android:statusBarColor">@color/navy_blue</item>
         <!-- Customize your theme here. -->
     </style>
 

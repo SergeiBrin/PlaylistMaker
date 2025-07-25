@@ -4,7 +4,6 @@ import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.db.data.converters.TrackDbConverter
 import com.example.playlistmaker.db.domain.repository.FavoriteTracksRepository
-import com.example.playlistmaker.player.domain.PlayerUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -13,9 +12,9 @@ class FavoriteTracksRepositoryImpl(
     val trackConverter: TrackDbConverter
 ) : FavoriteTracksRepository {
 
-    override suspend fun getTrackById(trackId: Int): PlayerUiState {
+    override suspend fun getTrackById(trackId: Int): Track? {
         val trackEntity = dataBase.trackDao().getTrackById(trackId)
-        return if (trackEntity != null) PlayerUiState.FavoriteTrackSuccessEvent else PlayerUiState.FavoriteTrackFailureEvent
+        return if (trackEntity != null) trackConverter.map(trackEntity) else null
     }
 
     override suspend fun getAllTracks(): Flow<List<Track>> {

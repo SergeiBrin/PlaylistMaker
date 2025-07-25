@@ -32,7 +32,23 @@
     <string name="playlist_name">Название*</string>
     <string name="playlist_description">Описание</string>
     <string name="create_playlist">Создать</string>
+    <string name="playlist_created">Плейлист «%1$s» создан</string>
     <string name="tracks_count">%1$d треков</string>
     <string name="add_track_in_playlist_failure">Трек уже добавлен в плейлист</string>
     <string name="add_track_in_playlist_success">Добавлено в плейлист</string>
+    <string name="playlist_time_and_count">%1$d минут • %2$d треков</string>
+    <string name="playlist_tracks_is_empty">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="no_tracks_in_playlist">В этом плейлисте нет треков</string>
+    <string name="share_playlist">Поделиться</string>
+    <string name="edit_playlist">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="delete_playlist_dialog_title">Хотите удалить плейлист «%1$s»?</string>
+    <string name="delete_track_dialog_title">Хотите удалить трек?</string>
+    <string name="dialog_finish_playlist_title">Завершить создание плейлиста?</string>
+    <string name="dialog_finish_playlist_message">Все несохраненные данные будут потеряны</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+    <string name="finish">Завершить</string>
 </resources>

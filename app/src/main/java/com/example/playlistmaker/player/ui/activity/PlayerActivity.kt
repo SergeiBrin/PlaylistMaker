@@ -17,10 +17,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
-import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.player.domain.PlayerUiState
 import com.example.playlistmaker.player.ui.adapter.PlayerPlaylistAdapter
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
+import com.example.playlistmaker.player.ui.result.PlayerState
+import com.example.playlistmaker.player.ui.result.PlayerUiState
 import com.example.playlistmaker.player.ui.viewmodel.PlayerViewModel
 import com.example.playlistmaker.playlist.ui.fragment.CreatePlaylistFragment
 import com.example.playlistmaker.utils.dpToPx
@@ -80,13 +80,13 @@ class PlayerActivity : AppCompatActivity() {
         genre = findViewById(R.id.genre_value)
         country = findViewById(R.id.country_value)
 
-        bottomSheet = findViewById(R.id.bottom_sheet_container)
+        bottomSheet = findViewById(R.id.bottom_sheet_tracks_container)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         createPlaylist = findViewById(R.id.create_playlist_button)
-        playlistRecycleView = findViewById(R.id.bottom_sheet_recycle_view)
+        playlistRecycleView = findViewById(R.id.bottom_sheet_tracks_recycle_view)
         playlistAdapter = PlayerPlaylistAdapter(playlists) { playlist ->
             playerViewModel.addTrackToPlaylist(playlist, track)
         }

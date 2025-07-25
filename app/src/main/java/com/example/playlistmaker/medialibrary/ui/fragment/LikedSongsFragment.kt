@@ -43,9 +43,12 @@ class LikedSongsFragment : Fragment() {
             goToPlayerActivity(track)
         }
 
-        trackAdapter = TracksAdapter(favoriteTracks) { track ->
-            onTrackClickDebounce(track)
-        }
+        trackAdapter = TracksAdapter(
+            favoriteTracks,
+            onTrackClick = { track ->
+                onTrackClickDebounce(track)
+            }
+        )
 
         recycleView.adapter = trackAdapter
 

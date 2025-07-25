@@ -43,7 +43,11 @@ class PlaylistsFragment : Fragment() {
         recycleView = binding.playlistsRecyclerView
         recycleView.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        adapter = MediaLibraryPlaylistAdapter(playlists)
+        adapter = MediaLibraryPlaylistAdapter(playlists) {
+            val action = MediaLibraryFragmentDirections.actionMediaLibraryFragmentToPlaylistFragment(it.id)
+            findNavController().navigate(action)
+        }
+
         recycleView.adapter = adapter
 
         viewModel.getAllPlaylists()

@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.utils.dpToPx
@@ -33,8 +34,11 @@ class MediaLibraryPlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(i
         tracksCount.text = itemView.context.getString(R.string.tracks_count, model.trackCount)
 
         val file = File(filePath, "${model.playlistName}.jpg")
+        val signature = ObjectKey(file.lastModified())
+
         Glide.with(itemView)
             .load(file)
+            .signature(signature)
             .transform(
                 CenterCrop(),
                 RoundedCorners(dpToPx(8f, itemView.context))
