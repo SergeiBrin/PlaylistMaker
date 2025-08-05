@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="PlaybackButtonView">
+        <attr name="playButtonIcon" format="reference" />
+        <attr name="pauseButtonIcon" format="reference" />
+    </declare-styleable>
+</resources>
