@@ -1,7 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
@@ -18,6 +17,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.core.model.Playlist
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.player.ui.adapter.PlayerPlaylistAdapter
+import com.example.playlistmaker.player.ui.customview.PlaybackButtonView
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
 import com.example.playlistmaker.player.ui.result.PlayerState
 import com.example.playlistmaker.player.ui.result.PlayerUiState
@@ -37,8 +37,10 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackName: TextView
     private lateinit var artistName: TextView
     private lateinit var addButton: ImageButton
-    private lateinit var playButton: ImageButton
-    private lateinit var pauseButton: ImageButton
+
+    private lateinit var playbackButton: PlaybackButtonView
+    // private lateinit var playButton: ImageButton
+    // private lateinit var pauseButton: ImageButton
     private lateinit var likeButton: ImageButton
     private lateinit var playbackTime: TextView
     private lateinit var duration: TextView
@@ -70,8 +72,8 @@ class PlayerActivity : AppCompatActivity() {
         trackName = findViewById(R.id.track_name)
         artistName = findViewById(R.id.artist_name)
         addButton = findViewById(R.id.add_playlist_button)
-        playButton = findViewById(R.id.play_button)
-        pauseButton = findViewById(R.id.pause_button)
+        // playButton = findViewById(R.id.play_button)
+        // pauseButton = findViewById(R.id.pause_button)
         likeButton = findViewById(R.id.like_button)
         playbackTime = findViewById(R.id.playback_time)
         duration = findViewById(R.id.duration_value)
@@ -79,6 +81,8 @@ class PlayerActivity : AppCompatActivity() {
         albumYear = findViewById(R.id.year_value)
         genre = findViewById(R.id.genre_value)
         country = findViewById(R.id.country_value)
+
+        playbackButton = findViewById(R.id.playback_button_view)
 
         bottomSheet = findViewById(R.id.bottom_sheet_tracks_container)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet).apply {
@@ -137,10 +141,12 @@ class PlayerActivity : AppCompatActivity() {
 
         playerViewModel.getPlayerStateLiveData().observe(this) { playerState ->
             when (playerState) {
-                PlayerState.StateDefault -> Log.i("PlayerState", "Default")
-                PlayerState.StatePrepared -> prepareViewForPlayback()
-                PlayerState.StatePlaying -> prepareViewForStartPlayer()
-                PlayerState.StatePaused -> prepareViewForPausePlayer()
+                PlayerState.StateDefault, PlayerState.StatePlaying, PlayerState.StatePaused ->
+                    updatePlaybackButtonView(playerState)
+                PlayerState.StatePrepared -> {
+                    prepareViewForPlayback()
+                    updatePlaybackButtonView(playerState)
+                }
             }
         }
 
@@ -191,11 +197,7 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        playButton.setOnClickListener {
-            playerViewModel.playbackControl()
-        }
-
-        pauseButton.setOnClickListener {
+        playbackButton.setOnClickListener {
             playerViewModel.playbackControl()
         }
 
@@ -237,20 +239,12 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun prepareViewForStartPlayer() {
-        playButton.visibility = View.INVISIBLE
-        pauseButton.visibility = View.VISIBLE
-    }
-
-    private fun prepareViewForPausePlayer() {
-        playButton.visibility = View.VISIBLE
-        pauseButton.visibility = View.INVISIBLE
+    private fun updatePlaybackButtonView(playerState: PlayerState) {
+        playbackButton.updateBitmap(playerState)
     }
 
     private fun prepareViewForPlayback() {
-        playButton.isEnabled = true
-        playButton.visibility = View.VISIBLE
-        pauseButton.visibility = View.INVISIBLE
+        playbackButton.isEnabled = true
         playbackTime.text = START_TIME
     }
 

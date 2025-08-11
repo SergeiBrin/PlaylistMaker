@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -88,14 +86,14 @@
             android:id="@+id/artist_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_30dp"
+            android:layout_marginBottom="@dimen/spacing_38dp"
             android:ellipsize="end"
             android:fontFamily="@font/ys_display_medium"
             android:gravity="start"
             android:maxLines="1"
             android:textColor="?attr/colorSecondary"
             android:textSize="@dimen/text_size_14sp"
-            app:layout_constraintBottom_toTopOf="@id/play_button"
+            app:layout_constraintBottom_toTopOf="@id/playback_button_view"
             app:layout_constraintEnd_toStartOf="@id/guideline_end_24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start_24dp"
             tools:text="The Beattles" />
@@ -106,35 +104,22 @@
             android:layout_height="51dp"
             android:background="@drawable/media_library_button_bg"
             android:src="@drawable/add_button"
-            app:layout_constraintBottom_toBottomOf="@+id/play_button"
-            app:layout_constraintEnd_toStartOf="@id/play_button"
+            app:layout_constraintBottom_toBottomOf="@+id/playback_button_view"
+            app:layout_constraintEnd_toStartOf="@id/playback_button_view"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@id/guideline_start_24dp"
-            app:layout_constraintTop_toTopOf="@id/play_button" />
+            app:layout_constraintTop_toTopOf="@id/playback_button_view" />
 
-        <ImageButton
-            android:id="@+id/play_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/spacing_4dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/play_button"
-            android:visibility="visible"
+        <com.example.playlistmaker.player.ui.customview.PlaybackButtonView
+            android:id="@+id/playback_button_view"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_marginBottom="@dimen/spacing_12dp"
             app:layout_constraintBottom_toTopOf="@+id/playback_time"
             app:layout_constraintEnd_toStartOf="@id/like_button"
-            app:layout_constraintStart_toEndOf="@id/add_playlist_button" />
-
-        <ImageButton
-            android:id="@+id/pause_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/spacing_4dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/pause_button"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/playback_time"
-            app:layout_constraintEnd_toStartOf="@id/like_button"
-            app:layout_constraintStart_toEndOf="@id/add_playlist_button" />
+            app:layout_constraintStart_toEndOf="@id/add_playlist_button"
+            app:playButtonIcon="@drawable/play_button"
+            app:pauseButtonIcon="@drawable/pause_button" />
 
         <ImageButton
             android:id="@+id/like_button"
@@ -143,10 +128,10 @@
             android:background="@drawable/media_library_button_bg"
             android:paddingTop="2dp"
             android:src="@drawable/like_inactive"
-            app:layout_constraintTop_toTopOf="@+id/play_button"
+            app:layout_constraintTop_toTopOf="@+id/playback_button_view"
             app:layout_constraintEnd_toStartOf="@id/guideline_end_24dp"
-            app:layout_constraintStart_toEndOf="@id/play_button"
-            app:layout_constraintBottom_toBottomOf="@id/play_button"
+            app:layout_constraintStart_toEndOf="@id/playback_button_view"
+            app:layout_constraintBottom_toBottomOf="@id/playback_button_view"
             app:layout_constraintVertical_bias="0.496" />
 
         <TextView
