@@ -156,18 +156,10 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     private fun getForegroundServiceTypeConstant(): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-        } else {
-            0
-        }
+        return ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return
-        }
-
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             getString(R.string.channel_name_music),

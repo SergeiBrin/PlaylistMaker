@@ -132,8 +132,4 @@ class PlayerViewModel(
             }
         }
     }
-
-    companion object {
-        private const val UPDATE_TIME_INTERVAL = 300L
-    }
 }
