@@ -7,24 +7,23 @@ package com.example.playlistmaker.player.ui.service
  import android.content.Intent
  import android.content.pm.ServiceInfo
  import android.media.MediaPlayer
-import android.os.Binder
- import android.os.Build
+ import android.os.Binder
  import android.os.IBinder
  import androidx.core.app.NotificationCompat
  import androidx.core.app.ServiceCompat
  import com.example.playlistmaker.R
  import com.example.playlistmaker.player.ui.result.PlayerState
  import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
+ import kotlinx.coroutines.Dispatchers
+ import kotlinx.coroutines.Job
+ import kotlinx.coroutines.SupervisorJob
+ import kotlinx.coroutines.delay
  import kotlinx.coroutines.flow.MutableStateFlow
  import kotlinx.coroutines.flow.StateFlow
  import kotlinx.coroutines.flow.asStateFlow
  import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
+ import java.text.SimpleDateFormat
+ import java.util.Locale
 
 class MusicService : Service(), AudioPlayerControl {
     private companion object {
@@ -89,12 +88,15 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     override fun startForeground() {
-        ServiceCompat.startForeground(
-            this,
-            SERVICE_NOTIFICATION_ID,
-            createServiceNotification(),
-            getForegroundServiceTypeConstant()
-        )
+        val currentState = _playerState.value
+        if (currentState is PlayerState.StatePlaying) {
+            ServiceCompat.startForeground(
+                this,
+                SERVICE_NOTIFICATION_ID,
+                createServiceNotification(),
+                getForegroundServiceTypeConstant()
+            )
+        }
     }
 
     override fun stopForeground() {

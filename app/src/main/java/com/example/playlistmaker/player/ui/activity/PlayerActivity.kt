@@ -258,7 +258,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        playerViewModel.startForeground()
+        if (!isFinishing) playerViewModel.startForeground()
     }
 
     override fun onDestroy() {
