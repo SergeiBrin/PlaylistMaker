@@ -51,4 +51,6 @@
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
     <string name="finish">Завершить</string>
+    <string name="channel_name_music">Music playback</string>
+    <string name="channel_desc_music">Playback controls and status</string>
 </resources>

@@ -1,6 +1,12 @@
 package com.example.playlistmaker.player.ui.activity
 
+import android.Manifest
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
@@ -9,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,6 +28,7 @@ import com.example.playlistmaker.player.ui.customview.PlaybackButtonView
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
 import com.example.playlistmaker.player.ui.result.PlayerState
 import com.example.playlistmaker.player.ui.result.PlayerUiState
+import com.example.playlistmaker.player.ui.service.MusicService
 import com.example.playlistmaker.player.ui.viewmodel.PlayerViewModel
 import com.example.playlistmaker.playlist.ui.fragment.CreatePlaylistFragment
 import com.example.playlistmaker.utils.dpToPx
@@ -39,8 +47,6 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var addButton: ImageButton
 
     private lateinit var playbackButton: PlaybackButtonView
-    // private lateinit var playButton: ImageButton
-    // private lateinit var pauseButton: ImageButton
     private lateinit var likeButton: ImageButton
     private lateinit var playbackTime: TextView
     private lateinit var duration: TextView
@@ -60,11 +66,38 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var overlay: View
 
+    private var mBound: Boolean = false
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            p0: ComponentName?,
+            p1: IBinder?
+        ) {
+            val binder = p1 as MusicService.MusicServiceBinder
+            playerViewModel.setAudioPlayerControl(binder.getService())
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            playerViewModel.removeAudioPlayerControl()
+            mBound = false
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            bindMusicService()
+         } else {
+            Toast.makeText(this, "Can't bind service!", Toast.LENGTH_LONG).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        // Подгружаем трек, переданный через Intent
         track = intent.getSerializableExtra(INTENT_TRACK_KEY) as Track
 
         arrowBackButton = findViewById(R.id.arrow_back_player)
@@ -72,8 +105,6 @@ class PlayerActivity : AppCompatActivity() {
         trackName = findViewById(R.id.track_name)
         artistName = findViewById(R.id.artist_name)
         addButton = findViewById(R.id.add_playlist_button)
-        // playButton = findViewById(R.id.play_button)
-        // pauseButton = findViewById(R.id.pause_button)
         likeButton = findViewById(R.id.like_button)
         playbackTime = findViewById(R.id.playback_time)
         duration = findViewById(R.id.duration_value)
@@ -141,11 +172,16 @@ class PlayerActivity : AppCompatActivity() {
 
         playerViewModel.getPlayerStateLiveData().observe(this) { playerState ->
             when (playerState) {
-                PlayerState.StateDefault, PlayerState.StatePlaying, PlayerState.StatePaused ->
+                is PlayerState.StateDefault,
+                is PlayerState.StatePlaying,
+                is PlayerState.StatePaused -> {
                     updatePlaybackButtonView(playerState)
-                PlayerState.StatePrepared -> {
+                    updateCurrentTrackTime(playerState.progress)
+                }
+                is PlayerState.StatePrepared -> {
                     prepareViewForPlayback()
                     updatePlaybackButtonView(playerState)
+                    updateCurrentTrackTime(playerState.progress)
                 }
             }
         }
@@ -153,7 +189,7 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel.getPlayerUiStateLiveData().observe(this) { playerUiState ->
             when (playerUiState) {
                 is PlayerUiState.TrackData -> updateLikeButtonIcon(playerUiState.track)
-                is PlayerUiState.CurrentTrackTimeLiveData -> updateCurrentTrackTime(playerUiState.trackTime)
+                // is PlayerUiState.CurrentTrackTimeLiveData -> updateCurrentTrackTime(playerUiState.trackTime)
                 PlayerUiState.FavoriteTrackSuccessEvent -> {
                     track.isFavorite = true
                     likeButton.setImageResource(R.drawable.like_active)
@@ -168,8 +204,6 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel.getPlaylistsLiveData().observe(this) {
             updatePlaylists(it)
         }
-
-        playerViewModel.preparePlayer(track.previewUrl)
 
         playerViewModel.getTrackById(track.trackId)
 
@@ -208,15 +242,34 @@ class PlayerActivity : AppCompatActivity() {
         populatePlayerActivityViews()
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playerViewModel.stopForeground()
+    }
+
     override fun onPause() {
         super.onPause()
-        playerViewModel.pausePlayer()
+        playerViewModel.startForeground()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindMusicService()
     }
 
     private fun populatePlayerActivityViews() {
         trackName.text = track.trackName
         artistName.text = track.artistName
-        playbackTime.text = START_TIME
+        playbackTime.text =  START_TIME
         duration.text = track.trackTime
         albumName.text = track.collectionName
         albumYear.text = extractYear(track.releaseDate)
@@ -258,8 +311,30 @@ class PlayerActivity : AppCompatActivity() {
         playlistAdapter.notifyDataSetChanged()
     }
 
+    private fun bindMusicService() {
+        if (!mBound) {
+            val intent = Intent(
+                this@PlayerActivity,
+                MusicService::class.java
+            ).apply {
+                putExtra(INTENT_TRACK_URL, track.previewUrl)
+                putExtra(INTENT_TRACK_NAME, track.trackName)
+                putExtra(INTENT_ARTIST_NAME, track.artistName)
+            }
+
+            bindService(intent, serviceConnection, BIND_AUTO_CREATE)
+        }
+    }
+
+    private fun unbindMusicService() {
+        unbindService(serviceConnection)
+    }
+
     companion object {
         private const val INTENT_TRACK_KEY = "TRACK"
+        private const val INTENT_TRACK_URL = "TRACK_URL"
+        private const val INTENT_TRACK_NAME = "TRACK_NAME"
+        private const val INTENT_ARTIST_NAME = "ARTIST_NAME"
         private const val START_TIME = "00:00"
     }
 }
