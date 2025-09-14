@@ -76,8 +76,10 @@ class PlaybackButtonView @JvmOverloads constructor(
 
     fun updateBitmap(newState: PlayerState) {
         imageBitmap = when (newState) {
-            PlayerState.StateDefault, PlayerState.StatePrepared, PlayerState.StatePaused -> playButtonBitmap
-            PlayerState.StatePlaying -> pauseButtonBitmap
+            is PlayerState.StateDefault,
+            is PlayerState.StatePrepared,
+            is PlayerState.StatePaused -> playButtonBitmap
+            is PlayerState.StatePlaying -> pauseButtonBitmap
         }
         invalidate()
     }

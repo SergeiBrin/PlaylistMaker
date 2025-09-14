@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
-import android.media.MediaPlayer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,23 +12,16 @@ import com.example.playlistmaker.db.domain.interactor.PlaylistInteractor
 import com.example.playlistmaker.player.ui.result.AddTrackInPlaylistResult
 import com.example.playlistmaker.player.ui.result.PlayerState
 import com.example.playlistmaker.player.ui.result.PlayerUiState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import com.example.playlistmaker.player.ui.service.AudioPlayerControl
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerViewModel(
     private val favoriteTracksInteractor: FavoriteTracksInteractor,
     private val playlistInteractor: PlaylistInteractor,
-    private val mediaPlayer: MediaPlayer
 ) : ViewModel() {
-    private var timerJob: Job? = null
+    private var audioPlayerControl: AudioPlayerControl? = null
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
-    private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.StateDefault)
+    private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.StateDefault())
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
 
     private val playerUiStateLiveData = MutableLiveData<PlayerUiState>()
@@ -42,48 +34,40 @@ class PlayerViewModel(
     fun getAddTrackToPlaylist(): LiveData<AddTrackInPlaylistResult> = addTrackToPlaylist
 
     override fun onCleared() {
-        playerStateLiveData.postValue(PlayerState.StateDefault)
-        mediaPlayer.release()
+        playerStateLiveData.postValue(PlayerState.StateDefault())
         super.onCleared()
     }
 
-    fun preparePlayer(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepareAsync()
-        }
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
 
-        mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.postValue(PlayerState.StatePrepared)
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect {
+                playerStateLiveData.postValue(it)
+            }
         }
+    }
 
-        mediaPlayer.setOnCompletionListener {
-            timerJob?.cancel()
-            playerStateLiveData.postValue(PlayerState.StatePrepared)
-        }
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
     }
 
     fun playbackControl() {
         val playerState = playerStateLiveData.value
 
         when(playerState) {
-            PlayerState.StatePlaying -> pausePlayer()
-            PlayerState.StatePrepared, PlayerState.StatePaused -> startPlayer()
+            is PlayerState.StatePlaying -> audioPlayerControl?.pause()
+            is PlayerState.StatePrepared, is PlayerState.StatePaused -> audioPlayerControl?.play()
             else -> Log.i("INFO", "Media player is in default state")
         }
     }
 
-    fun startPlayer() {
-        playerStateLiveData.postValue(PlayerState.StatePlaying)
-        mediaPlayer.start()
-
-        updatePlaybackTime()
+    fun startForeground() {
+        audioPlayerControl?.startForeground()
     }
 
-    fun pausePlayer() {
-        mediaPlayer.pause()
-        timerJob?.cancel()
-        playerStateLiveData.postValue(PlayerState.StatePaused)
+    fun stopForeground() {
+        audioPlayerControl?.stopForeground()
     }
 
     fun onFavoriteClicked(track: Track) {
@@ -147,19 +131,5 @@ class PlayerViewModel(
                 }
             }
         }
-    }
-
-    private fun updatePlaybackTime() {
-        timerJob = viewModelScope.launch {
-            while (mediaPlayer.isPlaying) {
-                delay(UPDATE_TIME_INTERVAL)
-                val trackPosition = dateFormat.format(mediaPlayer.currentPosition)
-                playerUiStateLiveData.postValue(PlayerUiState.CurrentTrackTimeLiveData(trackPosition))
-            }
-        }
-    }
-
-    companion object {
-        private const val UPDATE_TIME_INTERVAL = 300L
     }
 }
