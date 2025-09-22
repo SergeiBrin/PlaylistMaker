@@ -1,25 +1,23 @@
 package com.example.playlistmaker.medialibrary.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.db.domain.interactor.FavoriteTracksInteractor
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.stateIn
 
 class LikedSongsViewModel(
     val favoriteTracksInteractor: FavoriteTracksInteractor
 ) : ViewModel() {
-
-    private val favoriteTracks = MutableLiveData<List<Track>>()
-    fun getFavoriteTracks(): LiveData<List<Track>> = favoriteTracks
-
-    fun getFavoriteTracksOfDb() {
-        viewModelScope.launch {
-            favoriteTracksInteractor.getAllTracks().collect {
-                favoriteTracks.postValue(it)
-            }
-        }
-    }
+    val favoriteTracks: StateFlow<List<Track>> =
+        favoriteTracksInteractor.getAllTracks()
+            .distinctUntilChanged()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyList()
+            )
 }

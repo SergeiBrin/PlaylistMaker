@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical|end"
             android:background="#00FFFFFF"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="@dimen/image_size_12dp"

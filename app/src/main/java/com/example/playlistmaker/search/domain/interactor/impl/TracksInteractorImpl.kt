@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.domain.interactor.impl
 
-import com.example.playlistmaker.core.model.Track
 import com.example.playlistmaker.search.domain.common.Resource
 import com.example.playlistmaker.search.domain.interactor.api.TracksInteractor
 import com.example.playlistmaker.search.domain.repository.TracksRepository
@@ -13,12 +12,13 @@ class TracksInteractorImpl(
     private val tracksRepository: TracksRepository
 ) : TracksInteractor {
 
-    override fun searchTracks(searchText: String): Flow<List<Track>?> = flow {
+    override fun searchTracks(searchText: String): Flow<Resource> = flow {
         emitAll(
             tracksRepository.searchTracks(searchText).map { result ->
                 when (result) {
-                    is Resource.Success -> result.data
-                    is Resource.Error -> null
+                    is Resource.Success -> Resource.Success(result.data)
+                    is Resource.Error -> Resource.Error
+
                 }
             }
         )

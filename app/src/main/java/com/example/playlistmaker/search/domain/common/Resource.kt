@@ -1,6 +1,8 @@
 package com.example.playlistmaker.search.domain.common
 
-sealed class Resource<T>(val data: T? = null) {
-    class Success<T>(data: T) : Resource<T>(data)
-    class Error<T> : Resource<T>()
+import com.example.playlistmaker.core.model.Track
+
+sealed interface Resource {
+    data class Success(val data: List<Track>) : Resource
+    object Error : Resource
 }
