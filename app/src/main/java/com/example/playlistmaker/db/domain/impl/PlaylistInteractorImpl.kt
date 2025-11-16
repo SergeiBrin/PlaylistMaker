@@ -20,7 +20,7 @@ class PlaylistInteractorImpl(
         return playlistRepository.getPlaylistById(playlistId)
     }
 
-    override suspend fun getAllPlaylists(): Flow<List<Playlist>> {
+    override fun getAllPlaylists(): Flow<List<Playlist>> {
         return playlistRepository.getAllPlaylists()
     }
 

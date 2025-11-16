@@ -17,7 +17,7 @@ class FavoriteTracksRepositoryImpl(
         return if (trackEntity != null) trackConverter.map(trackEntity) else null
     }
 
-    override suspend fun getAllTracks(): Flow<List<Track>> {
+    override fun getAllTracks(): Flow<List<Track>> {
         val trackEntities = dataBase.trackDao().getAllTracks()
         return trackEntities.map { trackConverter.map(it) }
     }

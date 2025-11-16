@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient
 ) : TracksRepository {
-    override fun searchTracks(searchText: String): Flow<Resource<List<Track>>> = flow {
+    override fun searchTracks(searchText: String): Flow<Resource> = flow {
         val resp = networkClient.doRequest(TrackRequest(searchText))
 
         if (resp.resultCode == 200) {
@@ -32,7 +32,7 @@ class TracksRepositoryImpl(
             }
             emit(Resource.Success(tracks))
         } else {
-            emit(Resource.Error())
+            emit(Resource.Error)
         }
     }
 }

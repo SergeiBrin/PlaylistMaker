@@ -21,7 +21,7 @@ class PlaylistRepositoryImpl(
         return playlistEntity?.let { playlistConverter.map(it) }
     }
 
-    override suspend fun getAllPlaylists(): Flow<List<Playlist>> {
+    override fun getAllPlaylists(): Flow<List<Playlist>> {
         return dataBase
             .playlistDao()
             .getAllPlaylists()

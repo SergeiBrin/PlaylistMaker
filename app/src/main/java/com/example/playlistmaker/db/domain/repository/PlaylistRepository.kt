@@ -9,7 +9,7 @@ interface PlaylistRepository {
 
     suspend fun getPlaylistById(playlistId: Int): Playlist?
 
-    suspend fun getAllPlaylists(): Flow<List<Playlist>>
+    fun getAllPlaylists(): Flow<List<Playlist>>
 
     suspend fun getAllPlaylistsOnce(): List<Playlist>
 
